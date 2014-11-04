@@ -2,10 +2,12 @@
 
 use yii\helpers\Html;
 
-/* @var $this yii\web\View */
-/* @var $name string */
-/* @var $message string */
-/* @var $exception Exception */
+/**
+ * @var $this yii\web\View
+ * @var $name string
+ * @var $message string
+ * @var $exception Exception
+ */
 
 $this->title = $name;
 ?>
@@ -17,11 +19,8 @@ $this->title = $name;
         <?= nl2br(Html::encode($message)) ?>
     </div>
 
-    <p>
-        The above error occurred while the Web server was processing your request.
-    </p>
-    <p>
-        Please contact us if you think this is a server error. Thank you.
-    </p>
+    <p>Произошла ошибка при обработке вашего запроса.</p>
+
+    <p>Пожалуйста свяжитесь с нами, если это серверная ошибка. Спасибо.</p>
 
 </div>

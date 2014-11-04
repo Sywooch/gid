@@ -5,13 +5,15 @@ namespace app\models\song;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\AttributeBehavior;
+use app\components\AlbumSongBehavior;
+use app\models\User;
 
 /**
  * This is the model class for table "{{%songs}}".
  *
  * @property string $id_song
  * @property string $name
- * @property string $year
+ * @property integer $year
  * @property integer $template
  * @property integer $sound
  * @property integer $count_artists
@@ -43,6 +45,7 @@ class Song extends ActiveRecord
                 ],
                 'value' => \Yii::$app->user->id,
             ],
+            AlbumSongBehavior::className(),
         ];
     }
 
@@ -61,8 +64,7 @@ class Song extends ActiveRecord
     {
         return [
             [['name', 'year', 'template', 'sound', 'count_artists', 'original', 'version'], 'required'],
-            [['year'], 'safe'],
-            [['template', 'sound', 'count_artists', 'original', 'version'], 'integer'],
+            [['template', 'sound', 'count_artists', 'original', 'version', 'year'], 'integer'],
             [['name'], 'string', 'max' => 255]
         ];
     }
@@ -78,7 +80,7 @@ class Song extends ActiveRecord
             'year'            => 'Год выпуска',
             'template'        => 'Шаблон для артистов',
             'sound'           => 'Звук',
-            'count_artists'   => 'Число исполнителей в названии',
+            'count_artists'   => 'Число исполнителей',
             'original'        => 'Оригинал',
             'version'         => 'Версии',
             'created'         => 'Создано',
@@ -87,4 +89,52 @@ class Song extends ActiveRecord
             'id_updated_user' => 'Кем обновлено',
         ];
     }
+
+    public function getCreatedUser() {
+        return $this->hasOne(User::className(), ['id_user' => 'id_created_user']);
+    }
+
+    public function getUpdatedUser() {
+        return $this->hasOne(User::className(), ['id_user' => 'id_updated_user']);
+    }
+
+    public function getSoundText() {
+        return $this->soundArray[$this->sound];
+    }
+
+    const ORIGINAL = 1;
+    const ORIGINAL_AUTHOR = 2;
+    const ORIGINAL_COVER = 3;
+    const ORIGINAL_MASH_UP = 4;
+    const ORIGINAL_BASED = 5;
+
+    public function getOriginalArray() {
+        return [
+            self::ORIGINAL         => 'Оригинал',
+            self::ORIGINAL_AUTHOR  => 'Авторская версия',
+            self::ORIGINAL_COVER   => 'Кавер-версия',
+            self::ORIGINAL_MASH_UP => 'Мэшап',
+            self::ORIGINAL_BASED   => 'В основе другая композиция',
+        ];
+    }
+
+    public function getOriginalText() {
+        return $this->originalArray[$this->original];
+    }
+
+    const VERSION_FIRST = 1;
+    const VERSION_SECOND = 2;
+
+    public function getVersionArray() {
+        return [
+            self::VERSION_FIRST  => 'Первое',
+            self::VERSION_SECOND => 'Версия',
+        ];
+    }
+
+    public function getVersionText() {
+        return $this->versionArray[$this->version];
+    }
+
+
 }

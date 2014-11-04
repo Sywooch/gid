@@ -5,6 +5,7 @@ namespace app\models\album;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\AttributeBehavior;
+use app\components\AlbumSongBehavior;
 use app\models\User;
 
 /**
@@ -49,6 +50,7 @@ class Album extends ActiveRecord
                 ],
                 'value' => \Yii::$app->user->id,
             ],
+            AlbumSongBehavior::className(),
         ];
     }
 
@@ -97,17 +99,6 @@ class Album extends ActiveRecord
 
     public function getUpdatedUser() {
         return $this->hasOne(User::className(), ['id_user' => 'id_updated_user']);
-    }
-
-    //TODO подумать о примесях для звучания
-    const SOUND_STUDIO = 1;
-    const SOUND_LIVE = 2;
-
-    public function getSoundArray() {
-        return [
-            self::SOUND_STUDIO => 'Студийный',
-            self::SOUND_LIVE   => 'Концертный',
-        ];
     }
 
     public function getSoundText() {
