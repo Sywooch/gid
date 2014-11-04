@@ -17,10 +17,10 @@ class UserRoleRule extends Rule
 
     public function execute($user, $item, $params)
     {
-        //Получаем массив пользователя из базы
-        $user = ArrayHelper::getValue($params, 'user', User::findOne($user));
+        //Получаем массив пользователей из базы
+        $user = ArrayHelper::getValue($params, '{{%users}}', User::findOne($user));
         if ($user) {
-            $role = $user->level_user; //Значение из поля role базы данных, TODO level_user поменять на role
+            $role = $user->role;
 
             if ($item->name === 'admin') {
                 return $role == User::ROLE_ADMIN;

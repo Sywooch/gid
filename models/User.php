@@ -8,7 +8,7 @@ use yii\base\NotSupportedException;
 
 /**
  * @property string $pass
- * @property string $login
+ * @property string $username
  * @property integer $id_user
  */
 class User extends ActiveRecord implements IdentityInterface
@@ -19,22 +19,23 @@ class User extends ActiveRecord implements IdentityInterface
 
     public static function tableName()
     {
-        return 'users';
+        return '{{%users}}';
     }
 
     public function attributeLabels()
     {
         return [
-            'id_user'     => 'Идентификатор пользователя',
-            'login'       => 'Логин',
-            'mail'        => 'Почта',
-            'pass'        => 'Пароль',
-            'date_reg'    => 'Дата регистрации',
-            'last_visit'  => 'Дата последнего посещения',
-            'status_user' => 'Статус 0-неактивирован 1-активирован 2-забанен',
-            'gender'      => 'Пол 1-женщина 2-мужчина',
-            'date_birth'  => 'Дата рождения',
-            'level_user'  => 'Уровень доступа пользователя 1-простой 2-админ(автор)',
+            'id_user'    => 'ID пользователя',
+            'username'   => 'Логин',
+            'email'      => 'Почта',
+            'pass'       => 'Пароль-хэш',
+            'role'       => 'Роль',
+            'status'     => 'Статус',
+            'gender'     => 'Пол',
+            'birthday'   => 'Дата рождения',
+            'created'    => 'Дата регистрации',
+            'last_visit' => 'Дата последнего посещения',
+            'updated'    => 'Дата обновления',
         ];
     }
 
@@ -47,22 +48,17 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
-        throw new NotSupportedException('"findIdentityByAccessToken" не реализовано.');
-    }
-
-    /**
-     * Поиск пользователя по логину или почте!!!
+     * Поиск пользователя по логину или почте
      *
      * @param  string $username
      * @return static|null
      */
     public static function findByUsername($username)
     {
-        return static::find(['or', 'login' => $username, 'mail' => $username])->one();
+        return static::find()
+            ->where(['username' => $username])
+            ->orWhere(['email' => $username])
+            ->one();
     }
 
     /**
@@ -71,6 +67,25 @@ class User extends ActiveRecord implements IdentityInterface
     public function getId()
     {
         return $this->id_user;
+    }
+
+    /**
+     * Валидация пароля
+     *
+     * @param  string  $password password to validate
+     * @return boolean if password provided is valid for current user
+     */
+    public function validatePassword($password)
+    {
+        return \Yii::$app->security->validatePassword($password, $this->pass);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        throw new NotSupportedException('"findIdentityByAccessToken" не реализовано.');
     }
 
     /**
@@ -87,16 +102,5 @@ class User extends ActiveRecord implements IdentityInterface
     public function validateAuthKey($authKey)
     {
         return $this->authKey === $authKey;
-    }
-
-    /**
-     * Валидация пароля
-     *
-     * @param  string  $password password to validate
-     * @return boolean if password provided is valid for current user
-     */
-    public function validatePassword($password)
-    {
-        return \Yii::$app->security->validatePassword($password, $this->pass);
     }
 }
