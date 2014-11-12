@@ -13,35 +13,31 @@ use yii\db\ActiveRecord;
  */
 class ArticleCategory extends ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
     public static function tableName()
     {
         return '{{%article_category}}';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
-            [['id_category', 'name'], 'required'],
-            [['id_category', 'id_parent'], 'integer'],
-            [['name'], 'string', 'max' => 255]
+            ['name', 'required'],
+            ['id_parent', 'integer'],
+            ['name', 'string', 'max' => 255]
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
             'id_category' => 'ID категории',
             'name'        => 'Название',
-            'id_parent'   => 'ID родительской категории',
+            'id_parent'   => 'Родительская категория',
         ];
+    }
+
+    public function getParentCategory()
+    {
+        return $this->hasOne(ArticleCategory::className(), ['id_category' => 'id_parent']);
     }
 }

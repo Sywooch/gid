@@ -1,12 +1,12 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
 
 /**
  * @var $this yii\web\View
  * @var $model backend\models\article\ArticleCommentSearch
- * @var $form yii\widgets\ActiveForm
+ * @var $form yii\bootstrap\ActiveForm
  */
 ?>
 
@@ -16,26 +16,31 @@ use yii\widgets\ActiveForm;
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
+    <div class="col-sm-4">
 
-    <?= $form->field($model, 'id_comment') ?>
+        <?= $form->field($model, 'id_comment') ?>
 
-    <?= $form->field($model, 'id_parent') ?>
+        <?= $form->field($model, 'id_parent') ?>
 
-    <?= $form->field($model, 'id_article') ?>
+    </div>
 
-    <?= $form->field($model, 'id_user') ?>
+    <div class="col-sm-4">
 
-    <?= $form->field($model, 'title') ?>
+        <?= $form->field($model, 'id_article') ?>
 
-    <?php // echo $form->field($model, 'text') ?>
+        <?= $form->field($model, 'id_user') ?>
 
-    <?php // echo $form->field($model, 'status') ?>
+    </div>
 
-    <?php // echo $form->field($model, 'created') ?>
+    <div class="col-sm-4">
 
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+        <?= $form->field($model, 'status')->dropDownList($model->statusArray, ['prompt' => '']) ?>
+
+    </div>
+
+    <div class="form-group text-center">
+        <?= Html::submitButton('Найти', ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton('Очистить', ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_search', ['model' => $searchModel]) ?>
 
     <?php Pjax::begin([
-        'timeout'         => 2000,
+        'timeout'         => 5000,//TODO
         'enablePushState' => false,
     ]); ?>
 
@@ -42,6 +42,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'html',
                 'value' => function($model) {
                     return Html::a($model->category->name, ['article-category/view', 'id' => $model->id_category]);
+                }
+            ],
+            [
+                'attribute' => 'id_created_user',
+                'format' => 'html',
+                'value' => function($model) {
+                    return Html::a($model->createdUser->username, ['/user/view', 'id' => $model->id_created_user]);
+                }
+            ],
+            [
+                'header' => '<span class="glyphicon glyphicon-comment"></span>',//TODO
+                'value' => function($model) {
+                    return $model->commentsCount;
                 }
             ],
             'id_article',

@@ -6,20 +6,19 @@ use yii\widgets\Pjax;
 
 /**
  * @var $this yii\web\View
- * @var $searchModel app\models\article\ArticleCategorySearch
+ * @var $searchModel backend\models\article\ArticleCategorySearch
  * @var $dataProvider yii\data\ActiveDataProvider
  */
 
-$this->title = 'Article Categories';
+$this->title = 'Категории';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="article-category-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?= $this->render('_search', ['model' => $searchModel])?>
 
     <p>
-        <?= Html::a('Create Article Category', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить категорию', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin([
@@ -32,7 +31,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'layout'       => "{items}\n{summary}\n{pager}",
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'id_comment',
+            'name',
+            'id_category',
+            [
+                'attribute' => 'id_parent',
+                'format' => 'html',
+                'value' => function($model) {
+                    return Html::a($model->parentCategory->name, ['/article-category/view', 'id' => $model->parentCategory->id_category]);
+                }
+            ],
             [
                 'class'    => 'yii\grid\ActionColumn',
                 'template' => '{view} {update}',

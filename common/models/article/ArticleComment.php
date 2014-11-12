@@ -3,6 +3,9 @@
 namespace common\models\article;
 
 use yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
+use yii\behaviors\AttributeBehavior;
+use common\models\User;
 
 /**
  * This is the model class for table "{{%article_comments}}".
@@ -18,41 +21,92 @@ use yii\db\ActiveRecord;
  */
 class ArticleComment extends ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
+    const STATUS_BANNED = 0;
+    const STATUS_ACTIVE = 1;
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'created',
+                ]
+            ],
+            [
+                'class' => AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'id_user',
+                ],
+                'value' => \Yii::$app->user->id,
+            ],
+        ];
+    }
+
     public static function tableName()
     {
         return '{{%article_comments}}';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
             [['id_parent', 'id_article', 'id_user', 'status', 'created'], 'integer'],
             [['id_user', 'text', 'created'], 'required'],
             [['text'], 'string'],
-            [['title'], 'string', 'max' => 255]
+            ['title', 'string', 'max' => 255],
+            ['status', 'in', 'range' => [self::STATUS_BANNED, self::STATUS_ACTIVE]],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
             'id_comment' => 'ID комментария',
-            'id_parent'  => 'ID родительского комментария',
-            'id_article' => 'ID статьи',
-            'id_user'    => 'ID пользователя',
+            'id_parent'  => 'Родительский комментарий',
+            'id_article' => 'Статья',
+            'id_user'    => 'Пользователь',
             'title'      => 'Заголовок',
             'text'       => 'Текст',
             'status'     => 'Статус',
             'created'    => 'Создано',
         ];
+    }
+
+    public function getStatusArray() {
+        return [
+            self::STATUS_BANNED => 'Забанен',
+            self::STATUS_ACTIVE => 'Активен',
+        ];
+    }
+
+    public function getStatusText() {
+        return $this->statusArray[$this->status];
+    }
+
+    public function getStatusClass() {
+        switch ($this->status) {
+            case self::STATUS_BANNED:
+                return 'label-danger';
+                break;
+            case self::STATUS_ACTIVE:
+                return 'label-success';
+                break;
+            default: return '';
+        }
+    }
+
+    public function getParentComment()
+    {
+        return $this->hasOne(ArticleComment::className(), ['id_comment' => 'id_parent']);
+    }
+
+    public function getArticle()
+    {
+        return $this->hasOne(Article::className(), ['id_article' => 'id_article']);
+    }
+
+    public function getUser() {
+        return $this->hasOne(User::className(), ['id_user' => 'id_user']);
     }
 }

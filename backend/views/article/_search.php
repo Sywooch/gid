@@ -1,12 +1,14 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use yii\bootstrap\ActiveForm;
+use common\models\article\ArticleCategory;
 
 /**
  * @var $this yii\web\View
  * @var $model backend\models\article\ArticleSearch
- * @var $form yii\widgets\ActiveForm
+ * @var $form yii\bootstrap\ActiveForm
  */
 ?>
 
@@ -15,19 +17,21 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
+        'layout' => 'horizontal',
     ]); ?>
 
     <?= $form->field($model, 'id_article') ?>
 
-    <?= $form->field($model, 'id_category') ?>
-
     <?= $form->field($model, 'title') ?>
 
-    <?php // echo $form->field($model, 'status') ?>
+    <?= $form->field($model, 'id_category')->dropDownList(
+        ArrayHelper::map(ArticleCategory::find()->asArray()->all(), 'id_category', 'name'),
+        ['prompt' => '']
+    )?>
 
-    <?php // echo $form->field($model, 'publication') ?>
+    <?= $form->field($model, 'status')->dropDownList($model->statusArray, ['prompt' => '']) ?>
 
-    <?php // echo $form->field($model, 'end') ?>
+    <?php // echo $form->field($model, 'end') по автору TODO?>
 
     <div class="form-group">
         <?= Html::submitButton('Найти', ['class' => 'btn btn-primary']) ?>

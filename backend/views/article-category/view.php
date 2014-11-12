@@ -5,19 +5,17 @@ use yii\widgets\DetailView;
 
 /**
  * @var $this yii\web\View
- * @var $model app\models\article\ArticleCategory
+ * @var $model common\models\article\ArticleCategory
  */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Article Categories', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Категории', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="article-category-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id_category], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Обновить', ['update', 'id' => $model->id_category], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id_category], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -32,7 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id_category',
             'name',
-            'id_parent',
+            [
+                'attribute' => 'id_parent',
+                'format' => 'html',
+                'value' => Html::a($model->parentCategory->name, ['/article-category/view', 'id' => $model->parentCategory->id_category])
+            ],
         ],
     ]) ?>
 

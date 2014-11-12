@@ -7,6 +7,7 @@ use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\AttributeBehavior;
 use yii\helpers\Inflector;
+use common\models\User;
 
 /**
  * Модель "Статьи", таблица - "{{%articles}}".
@@ -54,6 +55,16 @@ class Article extends ActiveRecord
             [
                 'class' => AttributeBehavior::className(),
                 'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_VALIDATE => 'end',
+                ],
+                'value' => function ($event) {
+                    $date = new \DateTime($event->sender->end);
+                    return $date->format('U');
+                },
+            ],
+            [
+                'class' => AttributeBehavior::className(),
+                'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => ['id_created_user', 'id_updated_user'],
                     ActiveRecord::EVENT_BEFORE_UPDATE => 'id_updated_user',
                 ],
@@ -71,9 +82,10 @@ class Article extends ActiveRecord
     {
         return [
             [['id_category', 'title', 'text'], 'required'],
-            [['id_category', 'status', 'publication', 'end', 'views'], 'integer'],
+            [['id_category', 'status', 'publication', 'views'], 'integer'],//, 'end'
             [['preview', 'text'], 'string'],
             ['alias', 'unique'],
+            ['end' , 'safe'],
             ['status', 'in', 'range' => [self::STATUS_NOT_PUBLISHED, self::STATUS_PUBLISHED, self::STATUS_DELETED]],
         ];
     }
@@ -82,7 +94,7 @@ class Article extends ActiveRecord
     {
         return [
             'id_article'      => 'ID статьи',
-            'id_category'     => 'ID категории',
+            'id_category'     => 'Категория',
             'title'           => 'Название',
             'alias'           => 'Алиас',
             'preview'         => 'Превью',
@@ -127,5 +139,21 @@ class Article extends ActiveRecord
 
     public function getCategory() {
         return $this->hasOne(ArticleCategory::className(), ['id_category' => 'id_category']);
+    }
+
+    public function getCreatedUser() {
+        return $this->hasOne(User::className(), ['id_user' => 'id_created_user']);
+    }
+
+    public function getUpdatedUser() {
+        return $this->hasOne(User::className(), ['id_user' => 'id_updated_user']);
+    }
+
+    public function getComments() {
+        return $this->hasMany(ArticleComment::className(), ['id_article' => 'id_article']);
+    }
+
+    public function getCommentsCount() {
+        return $this->getComments()->count();
     }
 }

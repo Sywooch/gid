@@ -12,20 +12,14 @@ use common\models\article\ArticleComment;
  */
 class ArticleCommentSearch extends ArticleComment
 {
-    /**
-     * @inheritdoc
-     */
+
     public function rules()
     {
         return [
-            [['id_comment', 'id_parent', 'id_article', 'id_user', 'status', 'created'], 'integer'],
-            [['title', 'text'], 'safe'],
+            [['id_comment', 'id_parent', 'id_article', 'id_user', 'status'], 'integer'],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
@@ -53,15 +47,11 @@ class ArticleCommentSearch extends ArticleComment
 
         $query->andFilterWhere([
             'id_comment' => $this->id_comment,
-            'id_parent' => $this->id_parent,
+            'id_parent'  => $this->id_parent,
             'id_article' => $this->id_article,
-            'id_user' => $this->id_user,
-            'status' => $this->status,
-            'created' => $this->created,
+            'id_user'    => $this->id_user,
+            'status'     => $this->status,
         ]);
-
-        $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'text', $this->text]);
 
         return $dataProvider;
     }

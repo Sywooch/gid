@@ -9,16 +9,10 @@ use yii\widgets\ActiveForm;
  * @var $form yii\widgets\ActiveForm
  */
 
-$this->params['breadcrumbs'][] = ['label' => 'Article Comments', 'url' => ['index']];
-
-if ($model->isNewRecord) {
-    $this->title = 'Create Article Comment';
-    $this->params['breadcrumbs'][] = $this->title;
-} else {
-    $this->title = 'Update Article Comment: ' . ' ' . $model->title;
-    $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id_comment]];
-    $this->params['breadcrumbs'][] = 'Update';
-}
+$this->params['breadcrumbs'][] = ['label' => 'Комментарии', 'url' => ['index']];
+$this->title = 'Обновить комментарий №' . $model->id_comment;
+$this->params['breadcrumbs'][] = ['label' => 'Комментарий №' . $model->id_comment, 'url' => ['view', 'id' => $model->id_comment]];
+$this->params['breadcrumbs'][] = 'Обновить';
 
 ?>
 
@@ -26,22 +20,14 @@ if ($model->isNewRecord) {
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'id_parent')->textInput(['maxlength' => 20]) ?>
-
-    <?= $form->field($model, 'id_article')->textInput() ?>
-
-    <?= $form->field($model, 'id_user')->textInput() ?>
-
     <?= $form->field($model, 'title')->textInput(['maxlength' => 255]) ?>
 
     <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
-
-    <?= $form->field($model, 'created')->textInput() ?>
+    <?= $form->field($model, 'status')->dropDownList($model->statusArray) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton('Обновить', ['class' => 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

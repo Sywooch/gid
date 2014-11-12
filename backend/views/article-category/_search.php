@@ -1,12 +1,12 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
 
 /**
  * @var $this yii\web\View
  * @var $model backend\models\article\ArticleCategorySearch
- * @var $form yii\widgets\ActiveForm
+ * @var $form yii\bootstrap\ActiveForm
  */
 ?>
 
@@ -17,15 +17,27 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id_category') ?>
+    <div class="col-sm-4">
 
-    <?= $form->field($model, 'name') ?>
+        <?= $form->field($model, 'id_category') ?>
 
-    <?= $form->field($model, 'id_parent') ?>
+    </div>
 
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+    <div class="col-sm-4">
+
+        <?= $form->field($model, 'name') ?>
+
+    </div>
+
+    <div class="col-sm-4">
+
+        <?= $form->field($model, 'id_parent') ?>
+
+    </div>
+
+    <div class="form-group text-center">
+        <?= Html::submitButton('Найти', ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton('Очистить', ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

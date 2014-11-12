@@ -2,6 +2,9 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\ArrayHelper;
+use common\models\article\ArticleCategory;
+use dosamigos\datetimepicker\DateTimePicker;
 
 /**
  * @var $this yii\web\View
@@ -27,7 +30,10 @@ if ($model->isNewRecord) {
         'layout' => 'horizontal',
     ]); ?>
 
-    <?= $form->field($model, 'id_category')->textInput() ?>
+    <?= $form->field($model, 'id_category')->dropDownList(
+        ArrayHelper::map(ArticleCategory::find()->asArray()->all(), 'id_category', 'name'),
+        ['prompt' => 'Выберите категорию']
+    ) ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => 255]) ?>
 
@@ -41,7 +47,18 @@ if ($model->isNewRecord) {
 
     <?= $form->field($model, 'publication')->textInput() ?>
 
-    <?= $form->field($model, 'end')->textInput() ?>
+    <?= $form->field($model, 'end')->widget(DateTimePicker::className(), [
+        'language' => 'ru',
+        'size' => 'xs',
+        'template' => "{button}{reset}{input}",
+        'pickButtonIcon' => 'glyphicon glyphicon-time',
+        'clientOptions' => [
+            'autoclose' => true,
+            'format' => 'dd.mm.yyyy HH:ii:ss',
+            'todayBtn' => true,
+            'pickerPosition' => "top-right"
+        ]
+    ]); ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Обновить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
