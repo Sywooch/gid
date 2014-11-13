@@ -26,12 +26,14 @@ use common\models\User;
  * @property integer $id_created_user
  * @property integer $updated
  * @property integer $id_updated_user
+ * @property boolean $active
  */
 class Article extends ActiveRecord
 {
     const STATUS_NOT_PUBLISHED = 0;
     const STATUS_PUBLISHED = 1;
-    const STATUS_DELETED = 2;
+    const OPTION_ACTIVE = true;
+    const OPTION_DELETED = false;
 
     public function behaviors()
     {
@@ -58,8 +60,11 @@ class Article extends ActiveRecord
                     ActiveRecord::EVENT_BEFORE_VALIDATE => 'end',
                 ],
                 'value' => function ($event) {
-                    $date = new \DateTime($event->sender->end);
-                    return $date->format('U');
+                    if (!empty($event->sender->end)) {
+                        $date = new \DateTime($event->sender->end);
+                        return $date->format('U');
+                    }
+                    else return null;
                 },
             ],
             [
@@ -69,6 +74,18 @@ class Article extends ActiveRecord
                     ActiveRecord::EVENT_BEFORE_UPDATE => 'id_updated_user',
                 ],
                 'value' => \Yii::$app->user->id,
+            ],
+            [
+                'class' => AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_VALIDATE => 'publication',
+                ],
+                'value' => function ($event) {
+                    if (!empty($event->sender->publication)) {
+                        return \Yii::$app->formatter->asTimestamp($event->sender->publication);
+                    }
+                    else return \Yii::$app->formatter->asTimestamp(date_create());
+                },
             ],
         ];
     }
@@ -82,11 +99,12 @@ class Article extends ActiveRecord
     {
         return [
             [['id_category', 'title', 'text'], 'required'],
-            [['id_category', 'status', 'publication', 'views'], 'integer'],//, 'end'
-            [['preview', 'text'], 'string'],
+            [['id_category', 'status'], 'integer'],//'publication', 'end'
+            [['preview', 'text', 'alias'], 'string'],
             ['alias', 'unique'],
-            ['end' , 'safe'],
-            ['status', 'in', 'range' => [self::STATUS_NOT_PUBLISHED, self::STATUS_PUBLISHED, self::STATUS_DELETED]],
+            [['publication', 'end'] , 'safe'],
+            ['status', 'in', 'range' => [self::STATUS_NOT_PUBLISHED, self::STATUS_PUBLISHED]],
+            ['active', 'boolean'],
         ];
     }
 
@@ -104,9 +122,10 @@ class Article extends ActiveRecord
             'end'             => 'Дата завершения',
             'views'           => 'Просмотры',
             'created'         => 'Создано',
-            'id_created_user' => 'Кем создано',
+            'id_created_user' => 'Автор',
             'updated'         => 'Обновлено',
             'id_updated_user' => 'Кем обновлено',
+            'active'          => 'Активно',
         ];
     }
 
@@ -114,7 +133,7 @@ class Article extends ActiveRecord
         return [
             self::STATUS_NOT_PUBLISHED => 'Не опубликовано',
             self::STATUS_PUBLISHED     => 'Опубликовано',
-            self::STATUS_DELETED       => 'Удалено',
+            //self::STATUS_DELETED       => 'Удалено',
         ];
     }
 
@@ -130,11 +149,15 @@ class Article extends ActiveRecord
             case self::STATUS_PUBLISHED:
                 return 'label-success';
                 break;
-            case self::STATUS_DELETED:
+/*            case self::STATUS_DELETED:
                 return 'label-danger';
-                break;
+                break;*/
             default: return '';
         }
+    }
+
+    public function getStatusSpan() {
+        return "<span class='label " . $this->statusClass . "'>" . $this->statusText . '</span>';
     }
 
     public function getCategory() {
@@ -154,6 +177,10 @@ class Article extends ActiveRecord
     }
 
     public function getCommentsCount() {
+        return $this->getComments()->count();
+    }
+
+    public function saveViews() {
         return $this->getComments()->count();
     }
 }

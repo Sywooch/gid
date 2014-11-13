@@ -2,34 +2,49 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
 
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\UserSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/**
+ * @var $this yii\web\View
+ * @var $searchModel backend\models\UserSearch
+ * @var $dataProvider yii\data\ActiveDataProvider
+ */
 
-$this->title = 'Users';
+$this->title = 'Пользователи';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
 
+    <p><?= Html::a('Добавить пользователя', ['create'], ['class' => 'btn btn-success']) ?></p>
+
     <?= $this->render('_search', ['model' => $searchModel])?>
 
-    <p>
-        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?php Pjax::begin([
+        'timeout'         => 5000,//TODO
+        'enablePushState' => false,
+    ]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        'layout' => "{items}\n{summary}\n{pager}",
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id_user',
             'username',
             'email:email',
-            'pass',
-            'role',
-            // 'status',
+            [
+                'attribute' => 'role',
+                'value' => function($model) {
+                    return $model->roleText;
+                }
+            ],
+            [
+                'attribute' => 'status',
+                'format' => 'html',
+                'value' => function($model) {
+                    return $model->statusSpan;
+                }
+            ],
+            'id_user',
             // 'gender',
             // 'birthday',
             // 'created',
@@ -38,6 +53,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); ?>
+    ]) ?>
+
+    <?php Pjax::end(); ?>
 
 </div>

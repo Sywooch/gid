@@ -30,7 +30,6 @@ AppAsset::register($this);
 
     <header class="header">
         <a href="<?/*= Yii::getAlias('@frontendUrl') */?>" class="logo">
-            <!-- Add the class icon to your logo image or logo icon to add the margining -->
             <?= Yii::$app->name ?>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
@@ -148,7 +147,7 @@ AppAsset::register($this);
                         <!--<img src="<?/*= Yii::$app->user->identity->profile->picture ?: '/img/anonymous.jpg' */?>" class="img-circle" alt="User Image" />-->
                     </div>
                     <div class="pull-left info">
-                        <p><?//= Yii::t('backend', 'Hello, {username}', ['username'=>Yii::$app->user->identity->username]) ?></p>
+                        <p><?= 'Привет, ' . Yii::$app->user->identity->username ?></p>
                         <a href="<?php echo \yii\helpers\Url::to(['/sign-in/profile']) ?>">
                             <i class="fa fa-circle text-success"></i>
                             <?= Yii::$app->formatter->asDatetime(time()) ?>

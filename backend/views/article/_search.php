@@ -18,22 +18,43 @@ use common\models\article\ArticleCategory;
         'action' => ['index'],
         'method' => 'get',
         'layout' => 'horizontal',
+        'fieldConfig' => [
+            'template' => "{label}\n{beginWrapper}\n{input}\n{endWrapper}",
+            'horizontalCssClasses' => [
+                'label' => 'col-sm-4',
+                //'wrapper' => 'col-sm-6',
+            ],
+        ],
     ]); ?>
 
-    <?= $form->field($model, 'id_article') ?>
+    <div class="col-sm-4">
 
-    <?= $form->field($model, 'title') ?>
+        <?= $form->field($model, 'id_article') ?>
 
-    <?= $form->field($model, 'id_category')->dropDownList(
-        ArrayHelper::map(ArticleCategory::find()->asArray()->all(), 'id_category', 'name'),
-        ['prompt' => '']
-    )?>
+        <?= $form->field($model, 'title') ?>
 
-    <?= $form->field($model, 'status')->dropDownList($model->statusArray, ['prompt' => '']) ?>
+    </div>
 
-    <?php // echo $form->field($model, 'end') по автору TODO?>
+    <div class="col-sm-4">
 
-    <div class="form-group">
+        <?= $form->field($model, 'id_category')->dropDownList(
+            ArrayHelper::map(ArticleCategory::find()->asArray()->all(), 'id_category', 'name'),
+            ['prompt' => '']
+        )?>
+
+        <?= $form->field($model, 'id_created_user')?>
+
+    </div>
+
+    <div class="col-sm-4">
+
+        <?= $form->field($model, 'status')->dropDownList($model->statusArray, ['prompt' => '']) ?>
+
+        <?= $form->field($model, 'active')->checkbox()->label('Корзина')?>
+
+    </div>
+
+    <div class="form-group text-center">
         <?= Html::submitButton('Найти', ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton('Очистить', ['class' => 'btn btn-default']) ?>
     </div>

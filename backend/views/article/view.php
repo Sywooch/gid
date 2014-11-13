@@ -28,28 +28,28 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
+            'title',
             'id_article',
+            [
+                'attribute' => 'status',
+                'format'    => 'html',
+                'value' => $model->statusSpan
+            ],
             [
                 'attribute' => 'id_category',
                 'format' => 'html',
                 'value' => Html::a($model->category->name, ['article-category/view', 'id' => $model->id_category]),
             ],
-            'title',
             'alias',
             'preview:ntext',
             'text:ntext',
             [
-                'attribute' => 'status',
-                'format' => 'html',
-                'value' => $model->statusText
-            ],
-            [
                 'attribute' => 'publication',
-                'value'     => Yii::$app->formatter->asDatetime($model->publication),//TODO
+                'value'     => ($model->publication) ? Yii::$app->formatter->asDatetime($model->publication) : '',
             ],
             [
                 'attribute' => 'end',
-                'value'     => Yii::$app->formatter->asDatetime($model->end),
+                'value'     => ($model->end) ? Yii::$app->formatter->asDatetime($model->end) : '',
             ],
             'views',
             [
@@ -58,7 +58,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'id_created_user',
-                'value'     => $model->createdUser->username,
+                'format'    => 'html',
+                'value'     => Html::a($model->createdUser->username, ['/user/view', 'id' => $model->id_created_user]),
             ],
             [
                 'attribute' => 'updated',
@@ -66,7 +67,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'id_updated_user',
-                'value'     => $model->updatedUser->username,
+                'format'    => 'html',
+                'value'     => Html::a($model->updatedUser->username, ['/user/view', 'id' => $model->id_updated_user]),
             ],
         ],
     ]) ?>

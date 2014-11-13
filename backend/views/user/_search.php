@@ -3,9 +3,11 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\UserSearch */
-/* @var $form yii\widgets\ActiveForm */
+/**
+ * @var $this yii\web\View
+ * @var $model backend\models\UserSearch
+ * @var $form yii\widgets\ActiveForm
+ */
 ?>
 
 <div class="user-search">
@@ -15,31 +17,31 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id_user') ?>
+    <div class="col-sm-4">
 
-    <?= $form->field($model, 'username') ?>
+        <?= $form->field($model, 'id_user') ?>
 
-    <?= $form->field($model, 'email') ?>
+        <?= $form->field($model, 'username') ?>
 
-    <?= $form->field($model, 'pass') ?>
+    </div>
 
-    <?= $form->field($model, 'role') ?>
+    <div class="col-sm-4">
 
-    <?php // echo $form->field($model, 'status') ?>
+        <?= $form->field($model, 'email') ?>
 
-    <?php // echo $form->field($model, 'gender') ?>
+        <?= $form->field($model, 'role')->dropDownList($model->roleArray, ['prompt' => '']) ?>
 
-    <?php // echo $form->field($model, 'birthday') ?>
+    </div>
 
-    <?php // echo $form->field($model, 'created') ?>
+    <div class="col-sm-4">
 
-    <?php // echo $form->field($model, 'updated') ?>
+        <?= $form->field($model, 'status')->dropDownList($model->statusArray, ['prompt' => '']) ?>
 
-    <?php // echo $form->field($model, 'last_visit') ?>
+    </div>
 
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+    <div class="form-group text-center">
+        <?= Html::submitButton('Найти', ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton('Очистить', ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

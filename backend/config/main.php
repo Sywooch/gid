@@ -8,6 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-backend',
+    'name' => 'Music-Gid',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
@@ -33,14 +34,8 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName'  => false,
-            //'suffix'          => ".html",
             'rules' => [
-                //'' => 'site/index',
-                //'<action>' => 'site/<action>',
-                //'admin/article/<alias:[a-zA-Z0-9-]+>/'=>'admin/article/view',
-                //'<controller:\w+>'                                 => '<controller>/index',
-                '<controller:\w+>/<action:update|delete|view>/<id:\d+>' => '<controller>/<action>',
-                // принудительное / в конце
+                '<controller:[A-Za-z0-9-]+>/<action:update|delete|view>/<id:\d+>' => '<controller>/<action>',
             ]
         ],
     ],

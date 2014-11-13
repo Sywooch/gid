@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'status',
                 'format' => 'html',
                 'value' => function($model) {
-                    return "<span class='label " . $model->statusClass . "'>" . $model->statusText . '</span>';
+                    return $model->statusSpan;
                 }
             ],
             [
@@ -58,10 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'id_article',
-            [
-                'class'    => 'yii\grid\ActionColumn',
-                'template' => '{view} {update}',
-            ],
+            ['class'    => 'yii\grid\ActionColumn'],
         ],
     ]) ?>
 

@@ -8,7 +8,7 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
- * User model
+ * Модель "Пользователи"
  *
  * @property integer $id
  * @property string $username
@@ -26,9 +26,23 @@ class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 1;
+    const STATUS_BANNED = 2;
     const ROLE_USER = 1;
     const ROLE_MODERATOR = 2;
     const ROLE_ADMIN = 3;
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created', 'updated'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated',
+                ]
+            ],
+        ];
+    }
 
     public static function tableName()
     {
@@ -52,14 +66,47 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
+    public function getStatusArray() {
         return [
-            TimestampBehavior::className(),
+            self::STATUS_DELETED => 'Удален',
+            self::STATUS_ACTIVE  => 'Активен',
+            self::STATUS_BANNED  => 'Забанен',
         ];
+    }
+
+    public function getStatusText() {
+        return $this->statusArray[$this->status];
+    }
+
+    public function getStatusClass() {
+        switch ($this->status) {
+            case self::STATUS_DELETED:
+                return 'label-danger';
+                break;
+            case self::STATUS_ACTIVE:
+                return 'label-success';
+                break;
+            case self::STATUS_BANNED:
+                return 'label-warning';
+                break;
+            default: return '';
+        }
+    }
+
+    public function getStatusSpan() {
+        return "<span class='label " . $this->statusClass . "'>" . $this->statusText . '</span>';
+    }
+
+    public function getRoleArray() {
+        return [
+            self::ROLE_USER      => 'Пользователь',
+            self::ROLE_MODERATOR => 'Модератор',
+            self::ROLE_ADMIN     => 'Администратор',
+        ];
+    }
+
+    public function getRoleText() {
+        return $this->roleArray[$this->role];
     }
 
     /**

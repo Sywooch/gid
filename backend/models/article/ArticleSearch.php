@@ -48,9 +48,11 @@ class ArticleSearch extends Article
         }
 
         $query->andFilterWhere([
-            'id_article'  => $this->id_article,
-            'id_category' => $this->id_category,
-            'status'      => $this->status,
+            'id_article'      => $this->id_article,
+            'id_category'     => $this->id_category,
+            'status'          => $this->status,
+            'id_created_user' => $this->id_created_user,
+            'active'          => $this->active,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title]);

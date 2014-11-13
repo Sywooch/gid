@@ -98,7 +98,9 @@ class ArticleController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->active = $model::OPTION_DELETED;
+        $model->save();
 
         return $this->redirect(['index']);
     }

@@ -12,7 +12,7 @@ use dosamigos\datetimepicker\DateTimePicker;
  * @var $form yii\bootstrap\ActiveForm
  */
 
-$this->params['breadcrumbs'][] = ['label' => 'Articles', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Статьи', 'url' => ['index']];
 
 if ($model->isNewRecord) {
     $this->title = 'Добавить статью';
@@ -22,6 +22,9 @@ if ($model->isNewRecord) {
     $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id_article]];
     $this->params['breadcrumbs'][] = 'Обновить';
 }
+
+$model->end = ($model->end) ? Yii::$app->formatter->asDateTime($model->end, 'php:d.m.Y H:i:s') : '';
+$model->publication = ($model->publication) ? Yii::$app->formatter->asDateTime($model->publication, 'php:d.m.Y H:i:s') : '';
 ?>
 
 <div class="article-form">
@@ -45,9 +48,7 @@ if ($model->isNewRecord) {
 
     <?= $form->field($model, 'status')->dropDownList($model->statusArray) ?>
 
-    <?= $form->field($model, 'publication')->textInput() ?>
-
-    <?= $form->field($model, 'end')->widget(DateTimePicker::className(), [
+    <?php $dateTimePicker = [
         'language' => 'ru',
         'size' => 'xs',
         'template' => "{button}{reset}{input}",
@@ -58,7 +59,11 @@ if ($model->isNewRecord) {
             'todayBtn' => true,
             'pickerPosition' => "top-right"
         ]
-    ]); ?>
+    ];?>
+
+    <?= $form->field($model, 'publication')->widget(DateTimePicker::className(), $dateTimePicker) ?>
+
+    <?= $form->field($model, 'end')->widget(DateTimePicker::className(), $dateTimePicker) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Обновить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

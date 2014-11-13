@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\LoginForm;
+use common\models\article\Article;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -18,9 +19,6 @@ use yii\filters\AccessControl;
  */
 class SiteController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
     public function behaviors()
     {
         return [
@@ -49,9 +47,6 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function actions()
     {
         return [
@@ -67,7 +62,20 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $articles = Article::find()
+            ->select(['alias', 'title', 'preview', 'publication'])
+            ->where([
+                'status' => Article::STATUS_PUBLISHED,
+                'active' => Article::OPTION_ACTIVE,
+            ])
+            //->andWhere(['<', 'publication', new \yii\db\Expression('UNIX_TIMESTAMP()')])
+            ->andWhere(['<', 'publication', \Yii::$app->formatter->asTimestamp(date_create())])
+            ->orderBy(['publication' => SORT_DESC])
+            ->limit(15)
+            ->all();
+        return $this->render('index', [
+            'articles' => $articles,
+        ]);
     }
 
     public function actionLogin()
@@ -111,10 +119,10 @@ class SiteController extends Controller
         }
     }
 
-    public function actionAbout()
+    /*public function actionAbout()
     {
         return $this->render('about');
-    }
+    }*/
 
     public function actionSignup()
     {
