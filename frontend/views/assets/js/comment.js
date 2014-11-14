@@ -8,14 +8,12 @@ $(function () {
             //dataType: "json",
             dataType: "html",
             data: $(this).serialize(),
-            success: function(response) {
-                //alert('yeah');
+            success: function(data) {
+                $('#comments-list').append(data);
             }
         });
 
         return false;
     });
-
-
-
+    
 });

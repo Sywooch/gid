@@ -100,7 +100,8 @@ class ArticleController extends Controller
             $comment = new ArticleComment;
 
             if ($comment->load($request->post()) && $comment->save()) {
-                return true;
+                $this->render('_comment');
+                return commentTree($comment);
             }
             else return 3;
 
