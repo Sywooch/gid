@@ -9,6 +9,7 @@ $params = array_merge(
 return [
     'id' => 'app-frontend',
     'name' => 'Музыкальный Гид',
+    'homeUrl' => 'http://music-gid.ru',
     'language' => 'ru',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -35,10 +36,14 @@ return [
             'showScriptName'  => false,
             'suffix'          => ".html",
             'rules' => [
-                '' => 'site/index',
-                '<action>' => 'site/<action>',
-                //'<controller:\w+>'                                 => '<controller>/index',
+                ''                                             => 'site/index',
+                //'<controller:[a-zA-Z0-9-]+>'                   => '<controller>/index',
+                '<action>'                                     => 'site/<action>',
+
+                'article/add-comment'                          => 'article/add-comment',
                 'article/<alias:[a-zA-Z0-9-]+>'                => 'article/view',
+
+
                 '<controller:[A-Za-z0-9-]+>/<action>/<id:\d+>' => '<controller>/<action>',
             ]
         ],

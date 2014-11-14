@@ -635,7 +635,7 @@ class m130524_201442_init extends Migration
         $this->createTable('{{%article_comments}}', [
             'id_comment' => Schema::TYPE_BIGPK . " COMMENT 'ID комментария'",
             'id_parent'  => Schema::TYPE_BIGINT . " COMMENT 'ID родительского комментария'",
-            'id_article' => Schema::TYPE_INTEGER . " COMMENT 'ID статьи'",
+            'id_article' => Schema::TYPE_INTEGER . " NOT NULL COMMENT 'ID статьи'",
             'id_user'    => Schema::TYPE_INTEGER . " NOT NULL COMMENT 'ID пользователя'",
             'text'       => Schema::TYPE_TEXT . " NOT NULL COMMENT 'Текст'",
             'status'     => "TINYINT(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT 'Статус'",

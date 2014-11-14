@@ -86,4 +86,51 @@ class ArticleController extends Controller
             throw new NotFoundHttpException('Статья не найдена.');
         }
     }
+
+    /**
+     * Добавление комментария ajax-ом
+     * @return mixed
+     */
+    public function actionAddComment()
+    {
+        $request = Yii::$app->request;
+
+        if ($request->isAjax) {
+
+            $comment = new ArticleComment;
+
+            if ($comment->load($request->post()) && $comment->save()) {
+                return true;
+            }
+            else return 3;
+
+
+
+            /*Yii::$app->response->format = 'json';
+            if($model->save()) {
+                return ['message' => 'Success!'];
+            } else {
+                return ActiveForm::validate($model);;
+            }*/
+
+
+
+            /*$request = Yii::$app->request;
+            $model = new Model();
+            if ($request->isAjax && $model->load($request->post())) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+
+                return ActiveForm::validate($model);
+            } elseif ($model->load($request->post()) && $model->save()) {
+                return ['message' => 'Success!'];
+            } else {
+                return $this->renderAjax('create', [
+                    'model' => $model,
+                ]);
+            }*/
+
+
+
+        } else return 'notajax';//Forbidden
+    }
 }

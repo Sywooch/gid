@@ -52,11 +52,17 @@ class ArticleComment extends ActiveRecord
     {
         return [
             [['id_parent', 'id_article', 'id_user', 'status', 'created'], 'integer'],
-            [['id_user', 'text', 'created'], 'required'],
-            [['text'], 'string'],
-            ['title', 'string', 'max' => 255],
+            [['text', 'id_article'], 'required'],
+            ['text', 'string'],
+            ['text', 'onlyUser'],
             ['status', 'in', 'range' => [self::STATUS_BANNED, self::STATUS_ACTIVE]],
         ];
+    }
+
+    public function onlyUser()
+    {
+        if (\Yii::$app->user->isGuest)
+            $this->addError('text', 'Для комментирования необходимо авторизоваться');//TODO
     }
 
     public function attributeLabels()

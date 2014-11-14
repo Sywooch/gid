@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use frontend\assets\AppAsset;
 
 /**
  * @var $this yii\web\View
@@ -23,6 +24,13 @@ $this->registerCss("
 ");
 
 
+
+$assets = Yii::$app->assetManager->publish('@frontend/views/assets/js');
+$bundle = AppAsset::register($this);
+$bundle->js[] =  Yii::$app->homeUrl . $assets[1] . '/comment.js';
+
+
+
 $this->title = $article->title;
 $this->params['breadcrumbs'][] = ['label' => 'Статьи', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -33,12 +41,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= Yii::$app->formatter->asNtext($article->text)?>
 
+    <?php $form = ActiveForm::begin([
+        'id'     => 'newCommentForm',
+        //'action' => ['article/add-comment'],
+    ]); ?>
 
-    <p>Новый коммент</p>
+    <?= $form->field($newComment, 'id_article', ['template' => "{input}"])->hiddenInput(['value' => $article->id_article]) ?>
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?= $form->field($newComment, 'id_parent', ['template' => "{input}"])->hiddenInput(['value' => null]) ?>
 
-    <?= $form->field($newComment, 'text')->textarea(['rows' => 6, 'placeholder' => 'Введите текст сообщения']) ?>
+    <?= $form->field($newComment, 'text')->textarea(['rows' => 3, 'placeholder' => 'Введите текст сообщения'])->label('Добавить комментарий') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Опубликовать', ['class' => 'btn btn-primary']) ?>
@@ -50,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php function commentTree($comment) { ?>
 
-        <ul class="media-list" id="comment_<?=$comment->id_comment?>">
+        <ul class="media-list" id="comment-<?=$comment->id_comment?>">
             <li class="media">
                 <a class="media-left" href="#">
                     <img src="/images/cover.jpg" alt="..." width='64' height='64' class="img-circle">
@@ -60,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?=
                             Html::a($comment->user->username, ['user/view', 'name' => $comment->user->username]) . ' ' .
                             Yii::$app->formatter->asDatetime($comment->created) . ' ' .
-                            Html::a('#', '#comment_' . $comment->id_comment)
+                            Html::a('#', '#comment-' . $comment->id_comment)
                         ?>
                     </p>
                     <p style="min-height: 35px;"><?= Yii::$app->formatter->asNtext($comment->text) ?></p>
