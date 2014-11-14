@@ -4,16 +4,17 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\article\Article;
+use common\models\article\ArticleComment;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * ArticleController implements the CRUD actions for Article model.
+ * ArticleController
  */
 class ArticleController extends Controller
 {
-    public function behaviors()
+    /*public function behaviors()
     {
         return [
             [
@@ -28,7 +29,7 @@ class ArticleController extends Controller
                 },
             ],
         ];
-    }
+    }*/
 
 
 
@@ -48,33 +49,39 @@ class ArticleController extends Controller
     }
 
     /**
-     * Displays a single Article model.
-     * @param integer $id
+     * Вывод статьи с комментариями.
+     * @param string $alias
      * @return mixed
      */
     public function actionView($alias)
     {
-        $model = $this->findModel($alias);
+        $article = Article::find()
+            ->where([
+                'alias'  => $alias,
+                'status' => Article::STATUS_PUBLISHED,
+                'active' => Article::OPTION_ACTIVE,
+            ])
+            ->select(['title', 'text', 'publication', 'id_article'])
+            ->one();
 
-        //Обновляем количество просмотров
-        $model->updateCounters(['views' => 1]);
+        if ($article !== null) {
 
-        return $this->render('view', [
-            'model' => $model,
-        ]);
-    }
+            //Обновляем количество просмотров
+            $article->updateCounters(['views' => 1]);
 
-    /**
-     * Finds the Article model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Article the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($alias)
-    {
-        if (($model = Article::findOne(['alias' => $alias])) !== null) {
-            return $model;
+            $comments = ArticleComment::find()
+                ->where(['id_parent' => null, 'id_article' => $article->id_article, 'status' => ArticleComment::STATUS_ACTIVE])
+                ->select(['id_comment', 'id_parent', 'id_user', 'text', 'created'])
+                ->limit(20)
+                ->all();
+
+            $newComment = new ArticleComment;
+
+            return $this->render('view', [
+                'article'    => $article,
+                'comments'   => $comments,
+                'newComment' => $newComment,
+            ]);
         } else {
             throw new NotFoundHttpException('Статья не найдена.');
         }

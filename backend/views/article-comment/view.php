@@ -46,7 +46,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'html',
                 'value' => Html::a($model->user->username, ['/user/view', 'id' => $model->id_user]),
             ],
-            'title',
             'text:ntext',
             [
                 'attribute' => 'status',

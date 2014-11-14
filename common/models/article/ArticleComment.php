@@ -101,6 +101,11 @@ class ArticleComment extends ActiveRecord
         return $this->hasOne(ArticleComment::className(), ['id_comment' => 'id_parent']);
     }
 
+    public function getChildComments()
+    {
+        return $this->hasMany(ArticleComment::className(), ['id_parent' => 'id_comment']);
+    }
+
     public function getArticle()
     {
         return $this->hasOne(Article::className(), ['id_article' => 'id_article']);

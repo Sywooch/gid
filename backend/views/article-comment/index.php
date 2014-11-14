@@ -35,7 +35,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a($model->article->title, ['/article/view', 'id' => $model->id_article]);
                 }
             ],
-            'title',
             [
                 'attribute' => 'id_user',
                 'format' => 'html',

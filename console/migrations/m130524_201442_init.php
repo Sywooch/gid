@@ -637,7 +637,6 @@ class m130524_201442_init extends Migration
             'id_parent'  => Schema::TYPE_BIGINT . " COMMENT 'ID родительского комментария'",
             'id_article' => Schema::TYPE_INTEGER . " COMMENT 'ID статьи'",
             'id_user'    => Schema::TYPE_INTEGER . " NOT NULL COMMENT 'ID пользователя'",
-            'title'      => Schema::TYPE_STRING . " COMMENT 'Заголовок'",
             'text'       => Schema::TYPE_TEXT . " NOT NULL COMMENT 'Текст'",
             'status'     => "TINYINT(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT 'Статус'",
             'created'    => Schema::TYPE_INTEGER . " NOT NULL COMMENT 'Создано'",

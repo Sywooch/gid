@@ -1,12 +1,12 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
 
 /**
  * @var $this yii\web\View
  * @var $model common\models\article\ArticleComment
- * @var $form yii\widgets\ActiveForm
+ * @var $form yii\bootstrap\ActiveForm
  */
 
 $this->params['breadcrumbs'][] = ['label' => 'Комментарии', 'url' => ['index']];
@@ -19,8 +19,6 @@ $this->params['breadcrumbs'][] = 'Обновить';
 <div class="article-comment-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'title')->textInput(['maxlength' => 255]) ?>
 
     <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
 
