@@ -8,6 +8,7 @@ use common\models\article\ArticleComment;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 
 /**
  * ArticleController
@@ -103,7 +104,7 @@ class ArticleController extends Controller
                 $this->render('_comment');
                 return commentTree($comment);
             }
-            else return 3;
+            else return false;
 
 
 
@@ -132,6 +133,8 @@ class ArticleController extends Controller
 
 
 
-        } else return 'notajax';//Forbidden
+        } else {
+            throw new ForbiddenHttpException('У вас нет прав доступа.');
+        }
     }
 }

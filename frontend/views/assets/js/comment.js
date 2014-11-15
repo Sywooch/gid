@@ -2,44 +2,47 @@ $(function () {
 
     //Нажатие на "Ответить"
     $("body").on('click', ".reply", function () {
-        $('#replyComment').remove();
         var form = $('#newCommentForm').clone().attr('id', 'replyComment');
         var parent = $(this).parent().parent().parent().attr('id').slice(8);
         form.find('#articlecomment-id_parent').val(parent);
         $(this).after(form);
+    })
+
+    //Отправка ответа
+    .on('click', "#replyComment button", function () {
+        comment ('#replyComment');
+        return false;
     });
+
+    //Отправка нового комментария
+    $('#newCommentForm').on('beforeSubmit', function () {
+        comment ($(this));
+        return false;
+    });
+
     //Отправка комментария
-    $('#newCommentForm, #replyComment').on('beforeSubmit', function () {
+    function comment (form) {
+        var selectForm = $(form);
 
         jQuery.ajax({
             url: '/article/add-comment.html',
             type: 'POST',
             dataType: "html",
-            data: $(this).serialize(),
+            data: selectForm.serialize(),
             success: function(data) {
-                $('#comments-list').append(data);
+
+                if (form == '#replyComment') {
+                    var id = selectForm.find('#articlecomment-id_parent').val();
+                    $('#comment-' + id).children().children('.media-body').append(data);
+                    selectForm.remove();
+                }
+                else {
+                    $('#comments-list').append(data);
+                    selectForm[0].reset();
+                }
+
             }
         });
-
-        return false;
-    });
-
-
-
-    //Валидация
-    $('#replyComment').yiiActiveForm({
-        'id': "articlecomment-text",
-        'name': "text",
-        'container': ".field-articlecomment-text",
-        'input': "#articlecomment-text",
-        'error': ".help-block.help-block-error",
-        "validate": function (attribute, value, messages) {
-            yii.validation.required(value, messages, {
-                "message": "Необходимо заполнить «Текст».",
-                "skipOnEmpty": 1
-            });
-        }
-    });
-
+    }
 
 });
