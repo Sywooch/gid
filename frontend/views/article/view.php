@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $form->field($newComment, 'text')->textarea(['rows' => 3, 'placeholder' => 'Введите текст сообщения'])->label('Добавить комментарий') ?>
 
         <div class="form-group">
-            <?= Html::submitButton('Опубликовать', ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton('Опубликовать', ['class' => 'btn btn-primary btn-xs']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>

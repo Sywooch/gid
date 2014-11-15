@@ -24,7 +24,8 @@ function commentTree($comment) { ?>
                     Html::a('#', '#comment-' . $comment->id_comment)
                     ?>
                 </p>
-                <p style="min-height: 35px;"><?= Yii::$app->formatter->asNtext($comment->text) ?></p>
+                <p><?= Yii::$app->formatter->asNtext($comment->text) ?></p>
+                <div class='reply'>Ответить</div>
                 <?php
                 foreach ($comment->childComments as $child)
                     commentTree($child);
