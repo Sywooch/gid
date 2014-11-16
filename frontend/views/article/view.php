@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\widgets\LinkPager;
 use frontend\assets\AppAsset;
 
 /**
@@ -103,6 +104,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 foreach ($comments as $comment) {
                     commentTree($comment);
                 }
+
+            echo LinkPager::widget([
+                'pagination' => $pages,
+            ]);
             ?>
 
         <div id="comments-list">

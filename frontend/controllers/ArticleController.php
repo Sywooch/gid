@@ -6,6 +6,7 @@ use Yii;
 use common\models\article\Article;
 use common\models\article\ArticleComment;
 use yii\data\ActiveDataProvider;
+use yii\data\Pagination;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
@@ -70,18 +71,21 @@ class ArticleController extends Controller
             //Обновляем количество просмотров
             $article->updateCounters(['views' => 1]);
 
-            $comments = ArticleComment::find()
+            $query = ArticleComment::find()
                 ->where(['id_parent' => null, 'id_article' => $article->id_article, 'status' => ArticleComment::STATUS_ACTIVE])
-                ->select(['id_comment', 'id_parent', 'id_user', 'text', 'created'])
-                ->limit(20)
-                ->all();
+                ->select(['id_comment', 'id_parent', 'id_user', 'text', 'created']);
 
-            $newComment = new ArticleComment;
+            $countQuery = clone $query;
+            $pages = new Pagination(['totalCount' => $countQuery->count()]);
+            $comments = $query->offset($pages->offset)
+                ->limit($pages->limit)
+                ->all();
 
             return $this->render('view', [
                 'article'    => $article,
                 'comments'   => $comments,
-                'newComment' => $newComment,
+                'newComment' => new ArticleComment,
+                'pages'      => $pages,
             ]);
         } else {
             throw new NotFoundHttpException('Статья не найдена.');

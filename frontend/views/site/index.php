@@ -1,6 +1,8 @@
 <?php
 
 use yii\helpers\Html;
+use yii\bootstrap\Carousel;
+
 
 /**
  * @var $this yii\web\View
@@ -11,11 +13,20 @@ $this->title = 'Музыкальный Гид';
 <div class="site-index">
 
     <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+        <?= Carousel::widget([
+            'items' => [
+                [
+                    'content' => '<img src="http://www.kinokadr.ru/filmzimg/i/interstellar/gallery/01.jpg"/>',
+                    'caption' => '<h4>This is title</h4><p>This is the caption text</p>',
+                    //'options' => [...],
+                ],
+                [
+                    'content' => '<img src="http://www.kinokadr.ru/filmzimg/i/interstellar/gallery/02.jpg"/>',
+                    'caption' => '<h4>This is title</h4><p>This is the caption text</p>',
+                    //'options' => [...],
+                ],
+            ]
+        ]);?>
     </div>
 
     <div class="body-content">
