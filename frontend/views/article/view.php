@@ -14,12 +14,28 @@ use frontend\assets\AppAsset;
 
 $this->registerCss("
     /*font-size: 18px;*/
-    .media-left, .media-right, .media-body {
-        display: table-cell;
-        vertical-align: top;
+    ul {
+        padding-left: 0;
+        list-style: none;
     }
-    .media-left, .media>.pull-left {
-        padding-right: 10px;
+    .avatar {
+        margin-right: 10px;
+    }
+    .reply {
+        font-size: 12px;
+        color: #999CA5;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    #comments {
+        position: relative;
+        padding: 15px;
+        margin: 0 -15px 15px;
+        border-color: #e5e5e5 #eee #eee;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 4px 4px 0 0;
+        box-shadow: inset 0 3px 6px rgba(0, 0, 0, .05);
     }
 ");
 
@@ -41,13 +57,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= Yii::$app->formatter->asNtext($article->text)?>
 
-    <div id="comments-list">
 
-        <p>Комментарии (<?= $article->commentsCount?>)</p>
+    <section id="comments">
+
+        <h3>Комментарии (<?= $article->commentsCount?>)</h3>
 
         <?php $form = ActiveForm::begin([
-            'id'     => 'newCommentForm',
-            //'action' => ['article/add-comment'],
+            'id' => 'newCommentForm',
         ]); ?>
 
         <?= $form->field($newComment, 'id_article', ['template' => "{input}"])->hiddenInput(['value' => $article->id_article]) ?>
@@ -62,13 +78,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php ActiveForm::end(); ?>
 
-        <?php
-            $this->render('_comment');
+        <div id="comments-list">
 
-            foreach ($comments as $comment) {
-                commentTree($comment);
-            }
-        ?>
-    </div>
+            <?php
+                $this->render('_comment');
+
+                foreach ($comments as $comment) {
+                    commentTree($comment);
+                }
+            ?>
+
+        <div id="comments-list">
+
+    </section>
 
 </div>

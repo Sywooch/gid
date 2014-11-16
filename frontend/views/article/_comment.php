@@ -9,29 +9,32 @@ use yii\helpers\Html;
  *
  * @var $comment common\models\article\ArticleComment
  */
-function commentTree($comment) { ?>
+function commentTree($comment, $margin = 0) { ?>
 
-    <ul class="media-list" id="comment-<?=$comment->id_comment?>">
-        <li class="media">
-            <a class="media-left" href="#">
-                <img src="/images/cover.jpg" alt="..." width='64' height='64' class="img-circle">
-            </a>
-            <div class="media-body">
-                <p class="media-heading">
-                    <?=
-                    Html::a($comment->user->username, ['user/view', 'name' => $comment->user->username]) . ' ' .
-                    Yii::$app->formatter->asDatetime($comment->created) . ' ' .
-                    Html::a('#', '#comment-' . $comment->id_comment)
-                    ?>
-                </p>
-                <p><?= Yii::$app->formatter->asNtext($comment->text) ?></p>
-                <div class='reply'>Ответить</div>
-                <?php
-                foreach ($comment->childComments as $child)
-                    commentTree($child);
+    <div id="comment-<?= $comment->id_comment ?>" style="margin-left: <?= $margin?>%">
+        <div class="comment-content">
+            <div class="comment-header">
+                <img src="/images/cover.jpg" alt="..." width='32' height='32' class="img-circle avatar">
+                <?=
+                Html::a($comment->user->username, ['user/view', 'name' => $comment->user->username]) . ' ' .
+                Yii::$app->formatter->asDatetime($comment->created) . ' ' .
+                Html::a('#', '#comment-' . $comment->id_comment)
                 ?>
             </div>
-        </li>
-    </ul>
-
-<? } ?>
+            <div class="comment-text">
+                <?= Yii::$app->formatter->asNtext($comment->text) ?>
+            </div>
+            <div class='comment-footer'>
+                <span class='reply'>Ответить</span>
+            </div>
+        </div>
+    </div>
+    <?php
+        if ($margin < 40)
+            $margin += 8;
+        foreach ($comment->childComments as $child) {
+            commentTree($child, $margin);
+        }
+    return null;
+}
+?>
