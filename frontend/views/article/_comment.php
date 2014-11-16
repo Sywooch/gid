@@ -11,7 +11,7 @@ use yii\helpers\Html;
  */
 function commentTree($comment, $margin = 0) { ?>
 
-    <div id="comment-<?= $comment->id_comment ?>" style="margin-left: <?= $margin?>%">
+    <div id="comment-<?= $comment->id_comment ?>" style="margin-left: <?= $margin?>%" data-parent="comment-<?= $comment->id_parent ?>">
         <div class="comment-content">
             <div class="comment-header">
                 <img src="/images/cover.jpg" alt="..." width='32' height='32' class="img-circle avatar">
@@ -25,7 +25,10 @@ function commentTree($comment, $margin = 0) { ?>
                 <?= Yii::$app->formatter->asNtext($comment->text) ?>
             </div>
             <div class='comment-footer'>
-                <span class='reply'>Ответить</span>
+                <?php if (!Yii::$app->user->isGuest)  { ?>
+                    <span class='reply'>Ответить</span>
+                <? } ?>
+                <span class='hide-children'>Скрыть ветку <span class="caret"></span></span>
             </div>
         </div>
     </div>

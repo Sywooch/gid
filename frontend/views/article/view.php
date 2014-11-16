@@ -21,11 +21,12 @@ $this->registerCss("
     .avatar {
         margin-right: 10px;
     }
-    .reply {
+    .reply, .hide-children {
         font-size: 12px;
         color: #999CA5;
         text-decoration: underline;
         cursor: pointer;
+        margin-right: 5px;
     }
     #comments {
         position: relative;
@@ -62,21 +63,33 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <h3>Комментарии (<?= $article->commentsCount?>)</h3>
 
-        <?php $form = ActiveForm::begin([
-            'id' => 'newCommentForm',
-        ]); ?>
+        <?php if (Yii::$app->user->isGuest)  { ?>
 
-        <?= $form->field($newComment, 'id_article', ['template' => "{input}"])->hiddenInput(['value' => $article->id_article]) ?>
+            <div class="alert alert-success">Только зарегистрированные пользователи могут оставлять комментарии.</div>
 
-        <?= $form->field($newComment, 'id_parent', ['template' => "{input}"])->hiddenInput(['value' => null]) ?>
+        <?php
+        }
+        else {
 
-        <?= $form->field($newComment, 'text')->textarea(['rows' => 3, 'placeholder' => 'Введите текст сообщения'])->label('Добавить комментарий') ?>
+            $form = ActiveForm::begin([
+                'id' => 'newCommentForm',
+                'enableClientValidation' => false,
+            ]);
+        ?>
 
-        <div class="form-group">
-            <?= Html::submitButton('Опубликовать', ['class' => 'btn btn-primary btn-xs']) ?>
-        </div>
+            <?= $form->field($newComment, 'id_article', ['template' => "{input}"])->hiddenInput(['value' => $article->id_article]) ?>
 
-        <?php ActiveForm::end(); ?>
+            <?= $form->field($newComment, 'id_parent', ['template' => "{input}"])->hiddenInput(['value' => null]) ?>
+
+            <?= $form->field($newComment, 'text')->textarea(['rows' => 3, 'placeholder' => 'Введите текст сообщения'])->label('Добавить комментарий') ?>
+
+            <div class="form-group">
+                <?= Html::submitButton('Опубликовать', ['class' => 'btn btn-primary btn-xs']) ?>
+            </div>
+
+            <?php ActiveForm::end(); ?>
+
+        <? } ?>
 
         <div id="comments-list">
 

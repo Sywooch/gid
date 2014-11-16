@@ -2,7 +2,9 @@ $(function () {
 
     //Нажатие на "Ответить"
     $("body").on('click', ".reply", function () {
+        deleteForm ();
         var form = $('#newCommentForm').clone().attr('id', 'replyComment');
+        form[0].reset();
         var parent = $(this).parent().parent().parent().attr('id').slice(8);
         form.find('#articlecomment-id_parent').val(parent);
         $(this).after(form);
@@ -24,25 +26,38 @@ $(function () {
     function comment (form) {
         var selectForm = $(form);
 
-        jQuery.ajax({
-            url: '/article/add-comment.html',
-            type: 'POST',
-            dataType: "html",
-            data: selectForm.serialize(),
-            success: function(data) {
+        if (selectForm.find('#articlecomment-text').val() != '') {
 
-                if (form == '#replyComment') {
-                    var id = selectForm.find('#articlecomment-id_parent').val();
-                    $('#comment-' + id).children().children('.media-body').append(data);
-                    selectForm.remove();
-                }
-                else {
-                    $('#comments-list').append(data);
-                    selectForm[0].reset();
-                }
+            jQuery.ajax({
+                url: '/article/add-comment.html',
+                type: 'POST',
+                dataType: "html",
+                data: selectForm.serialize(),
+                success: function(data) {
 
-            }
-        });
+                    if (form == '#replyComment') {
+                        var id = selectForm.find('#articlecomment-id_parent').val();
+
+                        var childs = $('[data-parent = comment-' + id + ']');
+                        if (childs.size() > 0)
+                            childs.last().after(data);
+                        else $('[id = comment-' + id + ']').after(data);
+
+                        deleteForm ();
+                    }
+                    else {
+                        $('#comments-list').append(data);
+                        selectForm[0].reset();
+                    }
+
+                }
+            });
+        }
+    }
+
+    //Удаление формы комментария
+    function deleteForm () {
+        $('#replyComment').remove();
     }
 
 });

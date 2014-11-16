@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_search', ['model' => $searchModel]) ?>
 
     <?php Pjax::begin([
-        'timeout'         => 5000,//TODO
+        'timeout'         => 5000,
         'enablePushState' => false,
     ]); ?>
 
@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                'header' => '<span class="glyphicon glyphicon-comment"></span>',//TODO
+                'header' => '<span class="glyphicon glyphicon-comment"></span>',
                 'value' => function($model) {
                     return $model->commentsCount;
                 }
