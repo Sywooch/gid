@@ -28,6 +28,9 @@ $this->registerCss("
         cursor: pointer;
         margin-right: 5px;
     }
+    .hide-children .glyphicon {
+        font-size: 8px;
+    }
     #comments {
         position: relative;
         padding: 15px;
@@ -85,6 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="form-group">
                 <?= Html::submitButton('Опубликовать', ['class' => 'btn btn-primary btn-xs']) ?>
+                <?= Html::button('Удалить', ['class' => 'btn btn-danger btn-xs hidden']) ?>
             </div>
 
             <?php ActiveForm::end(); ?>

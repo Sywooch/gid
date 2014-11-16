@@ -11,7 +11,7 @@ use yii\helpers\Html;
  */
 function commentTree($comment, $margin = 0) { ?>
 
-    <div id="comment-<?= $comment->id_comment ?>" style="margin-left: <?= $margin?>%" data-parent="comment-<?= $comment->id_parent ?>">
+    <div id="comment-<?= $comment->id_comment ?>" style="margin-left: <?= $margin?>%">
         <div class="comment-content">
             <div class="comment-header">
                 <img src="/images/cover.jpg" alt="..." width='32' height='32' class="img-circle avatar">
@@ -28,16 +28,18 @@ function commentTree($comment, $margin = 0) { ?>
                 <?php if (!Yii::$app->user->isGuest)  { ?>
                     <span class='reply'>Ответить</span>
                 <? } ?>
-                <span class='hide-children'>Скрыть ветку <span class="caret"></span></span>
+                <span class='hide-children'>Скрыть ветку <span class="glyphicon glyphicon-chevron-down"></span></span>
             </div>
         </div>
     </div>
+    <div class="comment-children" data-parent="comment-<?= $comment->id_comment ?>">
     <?php
         if ($margin < 40)
             $margin += 8;
         foreach ($comment->childComments as $child) {
             commentTree($child, $margin);
         }
+    echo '</div>';
     return null;
 }
 ?>
