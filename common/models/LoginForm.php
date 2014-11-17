@@ -5,7 +5,7 @@ use Yii;
 use yii\base\Model;
 
 /**
- * Login form
+ * Форма входа
  */
 class LoginForm extends Model
 {
@@ -34,13 +34,11 @@ class LoginForm extends Model
     }
 
     /**
-     * Validates the password.
-     * This method serves as the inline validation for password.
+     * Правило для проверки пароля
      *
-     * @param string $attribute the attribute currently being validated
-     * @param array $params the additional name-value pairs given in the rule
+     * @param string $attribute атрибут к которому прикреплен вывод ошибки
      */
-    public function validatePassword($attribute, $params)
+    public function validatePassword($attribute)
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
@@ -51,9 +49,9 @@ class LoginForm extends Model
     }
 
     /**
-     * Logs in a user using the provided username and password.
+     * Вход пользователя через ввода логина(email) и пароля
      *
-     * @return boolean whether the user is logged in successfully
+     * @return boolean зависит от успешности входа
      */
     public function login()
     {
@@ -65,7 +63,7 @@ class LoginForm extends Model
     }
 
     /**
-     * Finds user by [[username]]
+     * Поиск пользователя по логину(email)
      *
      * @return User|null
      */
