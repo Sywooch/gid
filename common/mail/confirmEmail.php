@@ -12,10 +12,7 @@ $confirmLink = Yii::$app->urlManager->createAbsoluteUrl(['site/confirm-email', '
 
 <p>Здравствуйте, спасибо за регистрацию на music-gid.ru</p>
 
-<ul>
-    <li>Ваш логин: <?= Html::encode($user->username) ?></li>
-    <li>Ваш пароль: <?= Html::encode($user->pass) ?></li>
-</ul>
+<p>Ваш логин: <b><?= Html::encode($user->username) ?></b></p>
 
 <p>Для активации аккаунта пройдите по ссылке:</p>
 
