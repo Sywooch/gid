@@ -13,7 +13,7 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;
-    public $key;// Скрытое поле для робота
+    public $verifyCode;
 
     public function rules()
     {
@@ -28,7 +28,18 @@ class SignupForm extends Model
             ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Этот email уже занят.'],
 
             ['password', 'string', 'min' => 8],
+            ['password', 'samePasswordAndUsername'],
+            //['password', 'match', 'pattern' => '\d+\D+i'],//TODO
+
+            ['verifyCode', 'captcha'],
         ];
+    }
+
+    // Пароль совпадает с логином
+    public function samePasswordAndUsername()
+    {
+        if ($this->password === $this->username)
+            $this->addError('password', 'Пароль не должен совпадать с логином');
     }
 
     /**
@@ -43,8 +54,17 @@ class SignupForm extends Model
             $user->username = $this->username;
             $user->email = $this->email;
             $user->setPassword($this->password);
-            //$user->generateAuthKey();
-            $user->save();
+            $user->generateAuthKey();
+            $user->generateEmailConfirmToken();
+
+            if ($user->save()) {
+                Yii::$app->mailer->compose('confirmEmail', ['user' => $user])
+                    ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])
+                    ->setTo($this->email)
+                    ->setSubject('Подтверждение регистрации на music-gid.ru')
+                    ->send();
+            }
+
             return $user;
         }
 

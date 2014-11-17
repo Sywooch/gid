@@ -44,6 +44,10 @@ class LoginForm extends Model
             $user = $this->getUser();
             if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Неверные логин (email) или пароль.');
+            } elseif ($user && $user->status == User::STATUS_BANNED) {
+                $this->addError('username', 'Ваш аккаунт временно забанен.');
+            } elseif ($user && $user->status == User::STATUS_WAIT) {
+                $this->addError('username', 'Ваш аккаунт не активирован.');
             }
         }
     }

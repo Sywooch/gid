@@ -8,25 +8,33 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
- * Модель "Пользователи"
+ * Модель "Пользователь"
  *
- * @property integer $id
+ * @property integer $id_user
  * @property string $username
+ * @property string $email
  * @property string $pass
  * @property string $password_reset_token
- * @property string $email
  * @property string $auth_key
  * @property integer $role
  * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
- * @property string $password write-only password
+ * @property integer $gender
+ * @property integer $created
+ * @property integer $updated
+ * @property string $birthday
+ * @property integer $last_visit
+ * @property string $email_confirm_token
+ * @property mixed statusArray
+ * @property mixed statusClass
+ * @property mixed statusName
+ * @property mixed roleArray
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
+    const STATUS_WAIT = 0;
     const STATUS_ACTIVE = 1;
     const STATUS_BANNED = 2;
+    const STATUS_DELETED = 3;
     const ROLE_USER = 1;
     const ROLE_MODERATOR = 2;
     const ROLE_ADMIN = 3;
@@ -50,29 +58,33 @@ class User extends ActiveRecord implements IdentityInterface
     public function attributeLabels()
     {
         return [
-            'id_user'    => 'ID пользователя',
-            'username'   => 'Логин',
-            'email'      => 'Почта',
-            'pass'       => 'Пароль-хэш',
-            'role'       => 'Роль',
-            'status'     => 'Статус',
-            'gender'     => 'Пол',
-            'birthday'   => 'Дата рождения',
-            'created'    => 'Дата регистрации',
-            'last_visit' => 'Дата последнего посещения',
-            'updated'    => 'Дата обновления',
+            'id_user'              => 'ID пользователя',
+            'username'             => 'Логин',
+            'email'                => 'Почта',
+            'pass'                 => 'Пароль-хэш',
+            'role'                 => 'Роль',
+            'status'               => 'Статус',
+            'gender'               => 'Пол',
+            'birthday'             => 'Дата рождения',
+            'created'              => 'Дата регистрации',
+            'last_visit'           => 'Дата последнего посещения',
+            'updated'              => 'Дата обновления',
+            'auth_key'             => 'Ключ аутентификации',
+            'email_confirm_token'  => 'Токен подтверждения почты',
+            'password_reset_token' => 'Токен нового пароля',
         ];
     }
 
     public function getStatusArray() {
         return [
-            self::STATUS_DELETED => 'Удален',
+            self::STATUS_WAIT    => 'Не активирован',
             self::STATUS_ACTIVE  => 'Активен',
             self::STATUS_BANNED  => 'Забанен',
+            self::STATUS_DELETED => 'Удален',
         ];
     }
 
-    public function getStatusText() {
+    public function getStatusName() {
         return $this->statusArray[$this->status];
     }
 
@@ -91,8 +103,8 @@ class User extends ActiveRecord implements IdentityInterface
         }
     }
 
-    public function getStatusSpan() {
-        return "<span class='label " . $this->statusClass . "'>" . $this->statusText . '</span>';
+    public function getStatusText() {
+        return "<span class='label " . $this->statusClass . "'>" . $this->statusName . '</span>';
     }
 
     public function getRoleArray() {
@@ -103,41 +115,32 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
-    public function getRoleText() {
+    public function getRoleName() {
         return $this->roleArray[$this->role];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_DELETED],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['status', 'default', 'value' => self::STATUS_WAIT],
+            ['status', 'in', 'range' => array_keys($this->statusArray)],
             ['role', 'default', 'value' => self::ROLE_USER],
-            ['role', 'in', 'range' => [self::ROLE_USER, self::ROLE_MODERATOR, self::ROLE_ADMIN]],
+            ['role', 'in', 'range' => array_keys($this->roleArray)],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public static function findIdentity($id)
     {
         return static::findOne(['id_user' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
-    /**
-     * @inheritdoc
-     */
     public static function findIdentityByAccessToken($token, $type = null)
     {
         throw new NotSupportedException('"findIdentityByAccessToken" не реализовано.');
     }
 
     /**
-     * Finds user by username
+     * Поиск пользователя по логину или email
      *
      * @param string $username
      * @return static|null
@@ -165,7 +168,7 @@ class User extends ActiveRecord implements IdentityInterface
 
         return static::findOne([
             'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
+            'status'               => self::STATUS_ACTIVE,
         ]);
     }
 
@@ -186,36 +189,25 @@ class User extends ActiveRecord implements IdentityInterface
         return $timestamp + $expire >= time();
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getId()
     {
         return $this->getPrimaryKey();
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getAuthKey()
     {
-        //return $this->auth_key;
-        return true;
+        return $this->auth_key;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function validateAuthKey($authKey = '')
+    public function validateAuthKey($authKey)
     {
-        //return $this->getAuthKey() === $authKey;
-        return true;
+        return $this->getAuthKey() === $authKey;
     }
 
     /**
-     * Validates password
+     * Валидация пароля
      *
-     * @param string $password password to validate
+     * @param string $password строка для валидации
      * @return boolean if password provided is valid for current user
      */
     public function validatePassword($password)
@@ -255,5 +247,42 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+
+            if ($insert) {
+                $this->generateAuthKey();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param string $email_confirm_token
+     * @return static|null
+     */
+    public static function findByEmailConfirmToken($email_confirm_token)
+    {
+        return static::findOne(['email_confirm_token' => $email_confirm_token, 'status' => self::STATUS_WAIT]);
+    }
+
+    /**
+     * Generates email confirmation token
+     */
+    public function generateEmailConfirmToken()
+    {
+        $this->email_confirm_token = Yii::$app->security->generateRandomString();
+    }
+
+    /**
+     * Removes email confirmation token
+     */
+    public function removeEmailConfirmToken()
+    {
+        $this->email_confirm_token = null;
     }
 }

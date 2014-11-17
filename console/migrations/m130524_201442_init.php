@@ -14,33 +14,21 @@ class m130524_201442_init extends Migration
 
         // Таблица пользователей
         $this->createTable('{{%users}}', [
-            'id_user'    => Schema::TYPE_PK . " COMMENT 'ID пользователя'",
-            'username'   => Schema::TYPE_STRING . "(45) NOT NULL COMMENT 'Логин'",
-            'email'      => Schema::TYPE_STRING . "(45) NOT NULL COMMENT 'Почта'",
-            'pass'       => Schema::TYPE_STRING . " NOT NULL COMMENT 'Пароль-хэш'",
-            'role'       => "TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Роль'",
-            'status'     => "TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Статус'",
-            'gender'     => "TINYINT(1) UNSIGNED COMMENT 'Пол'",
-            'birthday'   => Schema::TYPE_DATE . " COMMENT 'Дата рождения'",
-            'created'    => Schema::TYPE_INTEGER . " NOT NULL COMMENT 'Дата регистрации'",
-            'updated'    => Schema::TYPE_INTEGER . " NOT NULL COMMENT 'Дата обновления'",
-            'last_visit' => Schema::TYPE_INTEGER . " NOT NULL COMMENT 'Дата последнего посещения'",
+            'id_user'              => Schema::TYPE_PK . " COMMENT 'ID пользователя'",
+            'username'             => Schema::TYPE_STRING . "(45) NOT NULL COMMENT 'Логин'",
+            'email'                => Schema::TYPE_STRING . "(45) NOT NULL COMMENT 'Почта'",
+            'pass'                 => Schema::TYPE_STRING . " NOT NULL COMMENT 'Пароль-хэш'",
+            'role'                 => "TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Роль'",
+            'status'               => "TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Статус'",
+            'gender'               => "TINYINT(1) UNSIGNED COMMENT 'Пол'",
+            'birthday'             => Schema::TYPE_DATE . " COMMENT 'Дата рождения'",
+            'created'              => Schema::TYPE_INTEGER . " NOT NULL COMMENT 'Дата регистрации'",
+            'updated'              => Schema::TYPE_INTEGER . " NOT NULL COMMENT 'Дата обновления'",
+            'last_visit'           => Schema::TYPE_INTEGER . " NOT NULL COMMENT 'Дата последнего посещения'",
+            'auth_key'             => Schema::TYPE_STRING . "(32) COMMENT 'Ключ аутентификации'",
+            'email_confirm_token'  => Schema::TYPE_STRING . " COMMENT 'Токен подтверждения почты'",
+            'password_reset_token' => Schema::TYPE_STRING . " COMMENT 'Токен нового пароля'",//TODO ?
         ], $tableOptions);
-
-        // Добавление demo пользователя
-        $this->insert('{{%users}}', [
-            'id_user'    => 1,
-            'username'   => 'demo',
-            'email'      => 'demo@mail.ru',
-            'pass'       => '$2y$13$v2nVZsRIB9tKWTyk2EdNB.2NrGQxoNMI4.JuG8f3u.kDEiIOhyGVK',
-            'role'       => 1,
-            'status'     => 1,
-            'gender'     => null,
-            'birthday'   => null,
-            'created'    => 123345,
-            'updated'    => 123456,
-            'last_visit' => 123456,
-        ]);
 
         // Обратная связь
         $this->createTable('{{%user_feedback}}', [
@@ -656,9 +644,9 @@ class m130524_201442_init extends Migration
             'value'      => Schema::TYPE_STRING . " NOT NULL COMMENT 'Значение параметра'",
         ], $tableOptions);
 
-        $this->addPrimaryKey('pk_album_params', '{{%article_params}}', ['id_article', 'id_param']);
-        $this->addForeignKey('fk_album_params_val', '{{%article_params}}', 'id_article', '{{%articles}}', 'id_article', 'CASCADE', 'CASCADE');
-        $this->addForeignKey('fk_album_params_rel', '{{%article_params}}', 'id_param', '{{%params_unique}}', 'id_param', 'CASCADE', 'CASCADE');
+        $this->addPrimaryKey('pk_article_params', '{{%article_params}}', ['id_article', 'id_param']);
+        $this->addForeignKey('fk_article_params_val', '{{%article_params}}', 'id_article', '{{%articles}}', 'id_article', 'CASCADE', 'CASCADE');
+        $this->addForeignKey('fk_article_params_rel', '{{%article_params}}', 'id_param', '{{%params_unique}}', 'id_param', 'CASCADE', 'CASCADE');
 
     }
 
