@@ -36,10 +36,8 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             [
                 'class' => TimestampBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created', 'updated'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated',
-                ]
+                'createdAtAttribute' => 'created',
+                'updatedAtAttribute' => 'updated',
             ],
         ];
     }

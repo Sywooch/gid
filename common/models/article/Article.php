@@ -6,6 +6,7 @@ use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\AttributeBehavior;
+use yii\behaviors\BlameableBehavior;
 use yii\helpers\Inflector;
 use common\models\User;
 
@@ -49,10 +50,13 @@ class Article extends ActiveRecord
             ],
             [
                 'class' => TimestampBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created', 'updated'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated',
-                ]
+                'createdAtAttribute' => 'created',
+                'updatedAtAttribute' => 'updated',
+            ],
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'id_created_user',
+                'updatedByAttribute' => 'id_updated_user',
             ],
             [
                 'class' => AttributeBehavior::className(),
@@ -66,14 +70,6 @@ class Article extends ActiveRecord
                     }
                     else return null;
                 },
-            ],
-            [
-                'class' => AttributeBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['id_created_user', 'id_updated_user'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'id_updated_user',
-                ],
-                'value' => \Yii::$app->user->id,
             ],
             [
                 'class' => AttributeBehavior::className(),

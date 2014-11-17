@@ -11,6 +11,7 @@ use frontend\assets\AppAsset;
  * @var $comments common\models\article\ArticleComment
  * @var $newComment common\models\article\ArticleComment
  * @var $form yii\bootstrap\ActiveForm
+ * @var $pages yii\data\Pagination
  */
 
 $this->registerCss("

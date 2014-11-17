@@ -18,14 +18,14 @@ $this->title = 'Музыкальный Гид';
                 [
                     'content' => '<img src="http://www.kinokadr.ru/filmzimg/i/interstellar/gallery/01.jpg"/>',
                     'caption' => '<h4>This is title</h4><p>This is the caption text</p>',
-                    //'options' => [...],
                 ],
                 [
                     'content' => '<img src="http://www.kinokadr.ru/filmzimg/i/interstellar/gallery/02.jpg"/>',
                     'caption' => '<h4>This is title</h4><p>This is the caption text</p>',
                     //'options' => [...],
                 ],
-            ]
+            ],
+            //'options' => ['class' => 'text-center'],
         ]);?>
     </div>
 

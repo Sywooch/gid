@@ -4,7 +4,7 @@ namespace common\models\article;
 
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
-use yii\behaviors\AttributeBehavior;
+use yii\behaviors\BlameableBehavior;
 use common\models\User;
 
 /**
@@ -29,16 +29,11 @@ class ArticleComment extends ActiveRecord
         return [
             [
                 'class' => TimestampBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'created',
-                ]
+                'createdAtAttribute' => 'created',
             ],
             [
-                'class' => AttributeBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'id_user',
-                ],
-                'value' => \Yii::$app->user->id,
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'id_user',
             ],
         ];
     }

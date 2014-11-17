@@ -601,6 +601,7 @@ class m130524_201442_init extends Migration
 
         $this->addForeignKey('fk_series_number', '{{%series_number}}', 'id_series', '{{%series}}', 'id_series', 'CASCADE', 'CASCADE');
 
+        //Категории Статей
         $this->createTable('{{%article_category}}', [
             'id_category' => "TINYINT(3) PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT 'ID категории'",
             'name'        => Schema::TYPE_STRING . " NOT NULL COMMENT 'Название'",
@@ -609,6 +610,7 @@ class m130524_201442_init extends Migration
 
         $this->addForeignKey('fk_category_parent', '{{%article_category}}', 'id_parent', '{{%article_category}}', 'id_category', 'CASCADE', 'CASCADE');
 
+        //Статьи
         $this->createTable('{{%articles}}', [
             'id_article'      => Schema::TYPE_PK . " COMMENT 'ID статьи'",
             'id_category'     => "TINYINT(3) NOT NULL COMMENT 'ID категории'",
@@ -632,6 +634,7 @@ class m130524_201442_init extends Migration
         $this->addForeignKey('fk_articles_updated', '{{%articles}}', 'id_updated_user', '{{%users}}', 'id_user', 'CASCADE', 'CASCADE');
         $this->createIndex('idx_article_title', '{{%articles}}', 'title');
 
+        //Комментарии к статьям
         $this->createTable('{{%article_comments}}', [
             'id_comment' => Schema::TYPE_BIGPK . " COMMENT 'ID комментария'",
             'id_parent'  => Schema::TYPE_BIGINT . " COMMENT 'ID родительского комментария'",
@@ -645,6 +648,17 @@ class m130524_201442_init extends Migration
         $this->addForeignKey('fk_article_comments', '{{%article_comments}}', 'id_article', '{{%articles}}', 'id_article', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_comment_user', '{{%article_comments}}', 'id_user', '{{%users}}', 'id_user', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_comment_parent', '{{%article_comments}}', 'id_parent', '{{%article_comments}}', 'id_comment', 'CASCADE', 'CASCADE');
+
+        // Таблица параметров статей
+        $this->createTable('{{%article_params}}', [
+            'id_article' => Schema::TYPE_INTEGER . " COMMENT 'ID статьи'",
+            'id_param'   => Schema::TYPE_SMALLINT . " NOT NULL COMMENT 'ID параметра'",
+            'value'      => Schema::TYPE_STRING . " NOT NULL COMMENT 'Значение параметра'",
+        ], $tableOptions);
+
+        $this->addPrimaryKey('pk_album_params', '{{%article_params}}', ['id_article', 'id_param']);
+        $this->addForeignKey('fk_album_params_val', '{{%article_params}}', 'id_article', '{{%articles}}', 'id_article', 'CASCADE', 'CASCADE');
+        $this->addForeignKey('fk_album_params_rel', '{{%article_params}}', 'id_param', '{{%params_unique}}', 'id_param', 'CASCADE', 'CASCADE');
 
     }
 

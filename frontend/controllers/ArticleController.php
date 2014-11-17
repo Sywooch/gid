@@ -76,7 +76,7 @@ class ArticleController extends Controller
                 ->select(['id_comment', 'id_parent', 'id_user', 'text', 'created']);
 
             $countQuery = clone $query;
-            $pages = new Pagination(['totalCount' => $countQuery->count()]);
+            $pages = new Pagination(['totalCount' => $countQuery->count(), 'defaultPageSize' => 10]);
             $comments = $query->offset($pages->offset)
                 ->limit($pages->limit)
                 ->all();

@@ -70,6 +70,7 @@ class SiteController extends Controller
             ])
             //->andWhere(['<', 'publication', new \yii\db\Expression('UNIX_TIMESTAMP()')])
             ->andWhere(['<', 'publication', \Yii::$app->formatter->asTimestamp(date_create())])
+            ->andWhere(['or', 'end > ' . \Yii::$app->formatter->asTimestamp(date_create()), 'end IS NULL'])
             ->orderBy(['publication' => SORT_DESC])
             ->limit(15)
             ->all();
@@ -78,6 +79,9 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * Вход на сайт
+     */
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
@@ -124,14 +128,16 @@ class SiteController extends Controller
         return $this->render('about');
     }*/
 
+    /**
+     * Регистрация пользователя
+     */
     public function actionSignup()
     {
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
-                }
+                Yii::$app->getSession()->setFlash('success', 'На Ваш E-mail выслано письмо для подтверждения регистрации.');
+                return $this->goHome();
             }
         }
 
