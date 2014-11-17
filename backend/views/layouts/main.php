@@ -1,10 +1,7 @@
 <?php
 use backend\assets\AppAsset;
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
-use yii\helpers\ArrayHelper;
 
 /**
  * @var $this \yii\web\View
@@ -24,112 +21,69 @@ AppAsset::register($this);
     <?php $this->head() ?>
 </head>
 <body class="skin-blue">
+
     <?php $this->beginBody() ?>
 
-
-
     <header class="header">
-        <a href="<?/*= Yii::getAlias('@frontendUrl') */?>" class="logo">
-            <?= Yii::$app->name ?>
-        </a>
-        <!-- Header Navbar: style can be found in header.less -->
+
+        <?= Html::a(Yii::$app->name, Yii::getAlias('@frontendUrl'), ['class' => 'logo', 'target' => '_blank']) ?>
+
         <nav class="navbar navbar-static-top" role="navigation">
-            <!-- Sidebar toggle button-->
+
             <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
-                <span class="sr-only"><?//= Yii::t('backend', 'Toggle navigation') ?></span>
+                <span class="sr-only">Левая панель</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
+
             <div class="navbar-right">
                 <ul class="nav navbar-nav">
-                    <li id="notifications-dropdown" class="dropdown notifications-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-bell"></i>
-                        <span class="badge bg-green">
-                            <?//= \common\models\SystemEvent::find()->today()->count() ?>
-                        </span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="header">
-                                <?//= Yii::t('backend', 'You have {num} events', ['num'=>\common\models\SystemEvent::find()->today()->count()]) ?>
-                            </li>
-                            <li>
-                                <!-- inner menu: contains the actual data -->
-                                <ul class="menu">
-                                    <?php /*foreach(\common\models\SystemEvent::find()->today()->orderBy(['created_at'=>SORT_DESC])->limit(10)->all() as $eventRecord): */?><!--
-                                        <li>
-                                            <a href="<?/*= Yii::$app->urlManager->createUrl(['/system-event/view', 'id'=>$eventRecord->id]) */?>">
-                                                <i class="fa fa-bell"></i>
-                                                <?/*= $eventRecord->getName() */?>
-                                            </a>
-                                        </li>
-                                    --><?php /*endforeach; */?>
-                                </ul>
-                            </li>
-                            <li class="footer">
-                                <?//= Html::a(Yii::t('backend', 'View all'), ['/system-event/index']) ?>
-                            </li>
-                        </ul>
-                    </li>
-                    <!-- Notifications: style can be found in dropdown.less -->
-                    <li id="log-dropdown" class="dropdown notifications-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-warning"></i>
-                        <span class="badge bg-red">
-                            <?//= \backend\models\SystemLog::find()->count() ?>
-                        </span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="header"><?//= Yii::t('backend', 'You have {num} log items', ['num'=>\backend\models\SystemLog::find()->count()]) ?></li>
-                            <li>
-                                <!-- inner menu: contains the actual data -->
-                                <ul class="menu">
-                                    <?php /*foreach(\backend\models\SystemLog::find()->orderBy(['log_time'=>SORT_DESC])->limit(5)->all() as $logEntry): */?><!--
-                                        <li>
-                                            <a href="<?/*= Yii::$app->urlManager->createUrl(['/log/view', 'id'=>$logEntry->id]) */?>">
-                                                <i class="fa fa-warning <?/*= $logEntry->level == \yii\log\Logger::LEVEL_ERROR ? 'bg-red' : 'bg-yellow' */?>"></i>
-                                                <?/*= $logEntry->category */?>
-                                            </a>
-                                        </li>
-                                    --><?php /*endforeach; */?>
-                                </ul>
-                            </li>
-                            <li class="footer">
-                                <?//= Html::a(Yii::t('backend', 'View all'), ['/log/index']) ?>
-                            </li>
-                        </ul>
-                    </li>
-                    <!-- User Account: style can be found in dropdown.less -->
+                    <!--
+                    http://almsaeedstudio.com/AdminLTE/
+                    dropdown messages-menu
+                    dropdown notifications-menu
+                    dropdown tasks-menu
+                    -->
+
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="glyphicon glyphicon-user"></i>
                             <span><?= Yii::$app->user->identity->username ?> <i class="caret"></i></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <!-- User image -->
+
                             <li class="user-header bg-light-blue">
-                                <!--<img src="<?/*= Yii::$app->user->identity->profile->picture ?: '/img/anonymous.jpg' */?>" class="img-circle" alt="User Image" />-->
+                                <img src="#" class="img-circle" alt="User Image">
                                 <p>
-                                    <?php Yii::$app->user->identity->username ?>
-                                    <small>
-                                        <?//= Yii::t('backend', 'Member since {0, date, short}', Yii::$app->user->identity->created) ?>
-                                    </small>
+                                    <?= Yii::$app->user->identity->username ?>
+                                    <small>На сайте с <?= Yii::$app->formatter->asDatetime(Yii::$app->user->identity->created) ?></small>
+                                </p>
                             </li>
-                            <!-- Menu Footer-->
+
+                            <li class="user-body">
+                                <div class="col-xs-4 text-center">
+                                    <a href="#">Followers</a>
+                                </div>
+                                <div class="col-xs-4 text-center">
+                                    <a href="#">Sales</a>
+                                </div>
+                                <div class="col-xs-4 text-center">
+                                    <a href="#">Friends</a>
+                                </div>
+                            </li>
+
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <?= Html::a('Profile', ['/sign-in/profile'], ['class'=>'btn btn-default btn-flat']) ?>
-                                </div>
-                                <div class="pull-left">
-                                    <?= Html::a('Account', ['/sign-in/account'], ['class'=>'btn btn-default btn-flat']) ?>
+                                    <?= Html::a('Профиль', ['/user/view', 'id' => Yii::$app->user->identity->id], ['class'=>'btn btn-default btn-flat']) ?>
                                 </div>
                                 <div class="pull-right">
-                                    <?= Html::a('Выйти', ['/logout'], ['class'=>'btn btn-default btn-flat']) ?>
+                                    <?= Html::a('Выйти', '/logout', ['class'=>'btn btn-default btn-flat', 'data-method' => 'post']) ?>
                                 </div>
                             </li>
                         </ul>
                     </li>
+
                 </ul>
             </div>
         </nav>
@@ -171,18 +125,21 @@ AppAsset::register($this);
                 ]) ?>
             </section>
 
-            <!-- Main content -->
             <section class="content">
-                <?php if(Yii::$app->session->hasFlash('alert')):?>
+
+                <?php if(Yii::$app->session->hasFlash('alert')) {?>
                     <?/*= \yii\bootstrap\Alert::widget([
                         'body'=>ArrayHelper::getValue(Yii::$app->session->getFlash('alert'), 'body'),
                         'options'=>ArrayHelper::getValue(Yii::$app->session->getFlash('alert'), 'options'),
                     ])*/?>
-                <?php endif; ?>
+                <?php } ?>
+
                 <?= $content ?>
-            </section><!-- /.content -->
-        </aside><!-- /.right-side -->
-    </div><!-- ./wrapper -->
+
+            </section>
+        </aside>
+
+    </div>
 
     <?php $this->endBody() ?>
 </body>
