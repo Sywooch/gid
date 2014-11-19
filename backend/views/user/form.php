@@ -1,12 +1,12 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
 
 /**
  * @var $this yii\web\View
  * @var $model common\models\User
- * @var $form yii\widgets\ActiveForm
+ * @var $form yii\bootstrap\ActiveForm
  */
 
 $this->params['breadcrumbs'][] = ['label' => 'Пользователи', 'url' => ['index']];
@@ -25,13 +25,13 @@ if ($model->isNewRecord) {
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'role')->dropDownList($model->roleArray) ?>
-
-    <?= $form->field($model, 'status')->dropDownList($model->statusArray) ?>
-
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Обновить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
+
+    <?= $form->field($model, 'role')->dropDownList($model->roleArray) ?>
+
+    <?= $form->field($model, 'status')->dropDownList($model->statusArray) ?>
 
     <?php ActiveForm::end(); ?>
 

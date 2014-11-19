@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'status',
                 'format'    => 'html',
-                'value' => $model->statusSpan
+                'value' => $model->statusText
             ],
             [
                 'attribute' => 'id_category',

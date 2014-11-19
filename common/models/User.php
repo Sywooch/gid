@@ -39,6 +39,9 @@ class User extends ActiveRecord implements IdentityInterface
     const ROLE_MODERATOR = 2;
     const ROLE_ADMIN = 3;
 
+    public $avatar;//большая аватарка
+    public $icon;//маленькая иконка, задать default
+
     public function behaviors()
     {
         return [
@@ -90,14 +93,17 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getStatusClass() {
         switch ($this->status) {
-            case self::STATUS_DELETED:
-                return 'label-danger';
+            case self::STATUS_WAIT:
+                return 'label-default';
                 break;
             case self::STATUS_ACTIVE:
                 return 'label-success';
                 break;
             case self::STATUS_BANNED:
                 return 'label-warning';
+                break;
+            case self::STATUS_DELETED:
+                return 'label-danger';
                 break;
             default: return '';
         }

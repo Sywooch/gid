@@ -20,13 +20,13 @@ $this->params['breadcrumbs'][] = 'Обновить';
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
-
-    <?= $form->field($model, 'status')->dropDownList($model->statusArray) ?>
-
     <div class="form-group">
         <?= Html::submitButton('Обновить', ['class' => 'btn btn-primary']) ?>
     </div>
+
+    <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
+
+    <?= $form->field($model, 'status')->dropDownList($model->statusArray) ?>
 
     <?php ActiveForm::end(); ?>
 

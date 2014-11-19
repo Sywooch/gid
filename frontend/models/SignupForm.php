@@ -15,6 +15,14 @@ class SignupForm extends Model
     public $password;
     public $verifyCode;
 
+    public function attributeLabels()
+    {
+        return [
+            'username' => 'Логин',
+            'password' => 'Пароль',
+        ];
+    }
+
     public function rules()
     {
         return [

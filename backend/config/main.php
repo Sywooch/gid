@@ -11,6 +11,24 @@ return [
     'name' => 'Music-Gid',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
+    'aliases' => [
+        '@frontendUrl' => 'http://music-gid.ru',
+    ],
+    'controllerMap' => [
+        'elfinder' => [
+            'class' => 'mihaildev\elfinder\Controller',
+            'access' => ['@'],
+            'disabledCommands' => ['netmount'],
+            'roots' => [
+                [
+                    'baseUrl'  => '@frontendUrl',
+                    'basePath' => '@frontend/web',
+                    'path'     => '/files',
+                    'name'     => 'Global'
+                ],
+            ]
+        ]
+    ],
     'bootstrap' => ['log'],
     'language' => 'ru',
     'modules' => [],

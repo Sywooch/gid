@@ -27,13 +27,13 @@ if ($model->isNewRecord) {
         'layout' => 'horizontal',
     ]); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => 255]) ?>
-
-    <?= $form->field($model, 'id_parent')->textInput() ?>
-
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Обновить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
+
+    <?= $form->field($model, 'name')->textInput(['maxlength' => 255]) ?>
+
+    <?= $form->field($model, 'id_parent')->textInput() ?>
 
     <?php ActiveForm::end(); ?>
 

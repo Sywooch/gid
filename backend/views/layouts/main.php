@@ -9,6 +9,12 @@ use yii\widgets\Breadcrumbs;
  */
 
 AppAsset::register($this);
+
+$this->registerJs("
+    $('body').on('click', '.user-menu', function () {
+        $('.dropdown-menu').toggle();
+    });
+");
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -89,25 +95,21 @@ AppAsset::register($this);
         </nav>
     </header>
 
-
-
-
     <div class="wrapper row-offcanvas row-offcanvas-left">
 
         <aside class="left-side sidebar-offcanvas">
             <section class="sidebar">
+
                 <div class="user-panel">
                     <div class="pull-left image">
-                        <!--<img src="<?/*= Yii::$app->user->identity->profile->picture ?: '/img/anonymous.jpg' */?>" class="img-circle" alt="User Image" />-->
+                        <!--<img src="#" class="img-circle" alt="User Image">-->
                     </div>
                     <div class="pull-left info">
                         <p><?= 'Привет, ' . Yii::$app->user->identity->username ?></p>
-                        <a href="<?php echo \yii\helpers\Url::to(['/sign-in/profile']) ?>">
-                            <i class="fa fa-circle text-success"></i>
-                            <?= Yii::$app->formatter->asDatetime(time()) ?>
-                        </a>
+                        <?= Yii::$app->formatter->asDatetime(time()) ?>
                     </div>
                 </div>
+
                 <?= $this->render('_sidebar-menu') ?>
             </section>
         </aside>
@@ -127,12 +129,7 @@ AppAsset::register($this);
 
             <section class="content">
 
-                <?php if(Yii::$app->session->hasFlash('alert')) {?>
-                    <?/*= \yii\bootstrap\Alert::widget([
-                        'body'=>ArrayHelper::getValue(Yii::$app->session->getFlash('alert'), 'body'),
-                        'options'=>ArrayHelper::getValue(Yii::$app->session->getFlash('alert'), 'options'),
-                    ])*/?>
-                <?php } ?>
+                <?//= Alert::widget() ?>
 
                 <?= $content ?>
 
@@ -140,6 +137,8 @@ AppAsset::register($this);
         </aside>
 
     </div>
+
+    <!--fa fa-gear-->
 
     <?php $this->endBody() ?>
 </body>

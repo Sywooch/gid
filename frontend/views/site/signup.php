@@ -16,13 +16,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to signup:</p>
+    <p>Пожалуйста заполните все поля для регистрации:</p>
 
     <div class="row">
         <div class="col-lg-5">
+
             <?php $form = ActiveForm::begin([
-                'id'     => 'form-signup',
-                'layout' => 'horizontal'
+                'id' => 'form-signup',
             ]); ?>
 
             <?= $form->field($model, 'username') ?>
@@ -32,8 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= $form->field($model, 'password')->passwordInput() ?>
 
             <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
-                'template' => '<div class="row"><div class="col-lg-6">{image}</div><div class="col-lg-6">{input}</div></div>',
-            ]) ?>
+                'template' => '<div class="row"><div class="col-lg-3">{image}</div><div class="col-lg-6">{input}</div></div>',
+            ])->label(false) ?>
 
             <div class="form-group">
                 <?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>

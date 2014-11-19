@@ -34,14 +34,14 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'role',
                 'value' => function($model) {
-                    return $model->roleText;
+                    return $model->roleName;
                 }
             ],
             [
                 'attribute' => 'status',
                 'format' => 'html',
                 'value' => function($model) {
-                    return $model->statusSpan;
+                    return $model->statusText;
                 }
             ],
             'id_user',

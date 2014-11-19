@@ -34,12 +34,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'pass',
             [
                 'attribute' => 'role',
-                'value' => $model->roleText
+                'value' => $model->roleName
             ],
             [
                 'attribute' => 'status',
                 'format'    => 'html',
-                'value' => $model->statusSpan
+                'value' => $model->statusText
             ],
             'gender',
             'birthday',

@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'status',
                 'format' => 'html',
                 'value' => function($model) {
-                    return "<span class='label " . $model->statusClass . "'>" . $model->statusText . '</span>';
+                    return $model->statusText;
                 }
             ],
             [

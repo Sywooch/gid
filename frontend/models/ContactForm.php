@@ -12,32 +12,44 @@ class ContactForm extends Model
 {
     public $name;
     public $email;
+    public $url;
     public $subject;
     public $body;
     public $verifyCode;
 
-    /**
-     * @inheritdoc
-     */
+    public function getSubjectArray() {
+        return [
+            0 => 'Информация на сайте',
+            1 => 'Ошибка в работе сайта',
+            2 => 'Ваши предложения',
+            3 => 'Другое',
+        ];
+    }
+
+    public function getSubjectName() {
+        return $this->subjectArray[$this->subject];
+    }
+
     public function rules()
     {
         return [
-            // name, email, subject and body are required
-            [['name', 'email', 'subject', 'body'], 'required'],
-            // email has to be a valid email address
+            [['subject', 'body'], 'required'],
+            [['name', 'email'], 'required', 'when' => function() {
+                return Yii::$app->user->isGuest;
+            }],
             ['email', 'email'],
-            // verifyCode needs to be entered correctly
+            ['url', 'url'],
             ['verifyCode', 'captcha'],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
-            'verifyCode' => 'Verification Code',
+            'name'    => 'Ваше имя',
+            'subject' => 'Тема',
+            'body'    => 'Текст',
+            'url'     => 'Ссылка',
         ];
     }
 
@@ -51,9 +63,9 @@ class ContactForm extends Model
     {
         return Yii::$app->mailer->compose()
             ->setTo($email)
-            ->setFrom([$this->email => $this->name])
-            ->setSubject($this->subject)
-            ->setTextBody($this->body)
+            ->setFrom((Yii::$app->user->isGuest) ? [$this->email => $this->name] : [Yii::$app->user->identity->email => Yii::$app->user->identity->username])
+            ->setSubject($this->subjectName)
+            ->setTextBody($this->body . $this->url)//TODO
             ->send();
     }
 }

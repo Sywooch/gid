@@ -29,11 +29,15 @@ class ArticleComment extends ActiveRecord
         return [
             [
                 'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'created',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'created',
+                ],
             ],
             [
                 'class' => BlameableBehavior::className(),
-                'createdByAttribute' => 'id_user',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'id_user',
+                ],
             ],
         ];
     }
@@ -48,7 +52,7 @@ class ArticleComment extends ActiveRecord
         return [
             [['id_parent', 'id_article', 'id_user', 'status', 'created'], 'integer'],
             ['text', 'string'],
-            ['status', 'in', 'range' => [self::STATUS_BANNED, self::STATUS_ACTIVE]],
+            ['status', 'in', 'range' => array_keys($this->statusArray)],
         ];
     }
 
@@ -73,7 +77,7 @@ class ArticleComment extends ActiveRecord
         ];
     }
 
-    public function getStatusText() {
+    public function getStatusName() {
         return $this->statusArray[$this->status];
     }
 
@@ -87,6 +91,10 @@ class ArticleComment extends ActiveRecord
                 break;
             default: return '';
         }
+    }
+
+    public function getStatusText() {
+        return "<span class='label " . $this->statusClass . "'>" . $this->statusName . '</span>';
     }
 
     public function getParentComment()

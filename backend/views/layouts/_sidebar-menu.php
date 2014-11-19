@@ -23,6 +23,24 @@ echo Menu::widget([
         ],
         ['label' => 'Пользователи', 'url' => '/user/index'],
 
+        ['label' => 'Параметры', 'url' => '#',
+            'options' => [
+                'class' => 'treeview'
+            ],
+            'items' => [
+                ['label' => 'Уникальные параметры', 'url' => '/param/index'],
+            ]
+        ],
+
+        ['label' => 'Система', 'url' => '#',
+            'options' => [
+                'class' => 'treeview'
+            ],
+            'items' => [
+                ['label' => 'Файловый менеджер', 'url' => '/system/file-manager'],
+            ]
+        ],
+
 
         ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
     ],

@@ -5,6 +5,9 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\ArrayHelper;
 use common\models\article\ArticleCategory;
 use dosamigos\datetimepicker\DateTimePicker;
+use mihaildev\ckeditor\CKEditor;
+
+use common\models\article\ArticleParam;
 
 /**
  * @var $this yii\web\View
@@ -31,7 +34,17 @@ $model->publication = ($model->publication) ? Yii::$app->formatter->asDateTime($
 
     <?php $form = ActiveForm::begin([
         'layout' => 'horizontal',
+        'fieldConfig' => [
+            'horizontalCssClasses' => [
+                'label' => 'col-sm-2',
+                'wrapper' => 'col-sm-10',
+            ],
+        ],
     ]); ?>
+
+    <div class="form-group">
+        <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Обновить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    </div>
 
     <?= $form->field($model, 'id_category')->dropDownList(
         ArrayHelper::map(ArticleCategory::find()->asArray()->all(), 'id_category', 'name'),
@@ -42,9 +55,17 @@ $model->publication = ($model->publication) ? Yii::$app->formatter->asDateTime($
 
     <?= $form->field($model, 'alias')->textInput(['maxlength' => 255]) ?>
 
-    <?= $form->field($model, 'preview')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'preview')->widget(CKEditor::className(), [
+        'editorOptions' => [
+            'preset' => 'standard',
+        ],
+    ]) ?>
 
-    <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'text')->widget(CKEditor::className(), [
+        'editorOptions' => [
+            'preset' => 'full',
+        ],
+    ]) ?>
 
     <?= $form->field($model, 'status')->dropDownList($model->statusArray) ?>
 
@@ -65,9 +86,11 @@ $model->publication = ($model->publication) ? Yii::$app->formatter->asDateTime($
 
     <?= $form->field($model, 'end')->widget(DateTimePicker::className(), $dateTimePicker) ?>
 
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Обновить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-    </div>
+    <?php foreach ($model->params as $params ) { ?>
+
+        <?= $form->field($params, 'value')->textInput(['maxlength' => 255])->label('sd')  ?>
+
+    <?php } ?>
 
     <?php ActiveForm::end(); ?>
 
