@@ -84,7 +84,7 @@ $this->registerJs("
                                     <?= Html::a('Профиль', ['/user/view', 'id' => Yii::$app->user->identity->id], ['class'=>'btn btn-default btn-flat']) ?>
                                 </div>
                                 <div class="pull-right">
-                                    <?= Html::a('Выйти', '/logout', ['class'=>'btn btn-default btn-flat', 'data-method' => 'post']) ?>
+                                    <?= Html::a('Выйти', '/site/logout', ['class'=>'btn btn-default btn-flat', 'data-method' => 'post']) ?>
                                 </div>
                             </li>
                         </ul>

@@ -9,31 +9,37 @@ use yii\bootstrap\ActiveForm;
  */
 
 $this->title = 'Вход';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="login">
+<div class="form-box">
 
-    <p>Пожалуйста заполните все поля для входа на сайт:</p>
+    <div class="header"><?= $this->title ?></div>
 
-    <div class="row">
-        <div class="col-lg-5">
+    <?php $form = ActiveForm::begin([
+        'id' => 'login-form'
+    ]); ?>
 
-            <?php $form = ActiveForm::begin([
-                'id' => 'login-form'
-            ]); ?>
+    <div class="body bg-gray">
 
-            <?= $form->field($model, 'username') ?>
+        <?= $form->field($model, 'username', [
+            'inputOptions' => [
+                'placeholder' => $model->getAttributeLabel('username'),
+            ]
+        ])->label(false) ?>
 
-            <?= $form->field($model, 'password')->passwordInput() ?>
+        <?= $form->field($model, 'password',  [
+            'inputOptions' => [
+                'placeholder' => $model->getAttributeLabel('password'),
+            ]
+        ])->passwordInput()->label(false) ?>
 
-            <?= $form->field($model, 'rememberMe')->checkbox() ?>
+        <?= $form->field($model, 'rememberMe')->checkbox() ?>
 
-            <div class="form-group">
-                <?= Html::submitButton('Войти', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-            </div>
-            
-            <?php ActiveForm::end(); ?>
-
-        </div>
     </div>
+
+    <div class="footer">
+        <?= Html::submitButton('Войти', ['class' => 'btn bg-olive btn-block', 'name' => 'login-button']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
+
 </div>
