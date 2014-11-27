@@ -63,20 +63,30 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        $articles = Article::find()
-            ->select(['alias', 'title', 'preview', 'publication'])
+        $query = Article::find()
             ->where([
                 'status' => Article::STATUS_PUBLISHED,
                 'active' => Article::OPTION_ACTIVE,
             ])
             //->andWhere(['<', 'publication', new \yii\db\Expression('UNIX_TIMESTAMP()')])
             ->andWhere(['<', 'publication', \Yii::$app->formatter->asTimestamp(date_create())])
-            ->andWhere(['or', 'end > ' . \Yii::$app->formatter->asTimestamp(date_create()), 'end IS NULL'])
+            ->andWhere(['or', 'end > ' . \Yii::$app->formatter->asTimestamp(date_create()), 'end IS NULL']);//несовпадение дат
+
+        $articles = $query
+            ->select(['alias', 'title', 'image', 'preview', 'publication'])
             ->orderBy(['publication' => SORT_DESC])
             ->limit(15)
             ->all();
+
+        $popularArticles = $query
+            ->select(['alias', 'title', 'image'])
+            ->orderBy(['views' => SORT_DESC])
+            ->limit(7)
+            ->all();
+
         return $this->render('index', [
-            'articles' => $articles,
+            'articles'        => $articles,
+            'popularArticles' => $popularArticles,
         ]);
     }
 

@@ -4,8 +4,10 @@ namespace common\models;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
+use yii\behaviors\AttributeBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use common\components\GenderBehavior;
 
 /**
  * Модель "Пользователь"
@@ -36,11 +38,24 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_BANNED = 2;
     const STATUS_DELETED = 3;
     const ROLE_USER = 1;
-    const ROLE_MODERATOR = 2;
-    const ROLE_ADMIN = 3;
+    const ROLE_AUTHOR = 2;
+    const ROLE_MODERATOR = 3;
+    const ROLE_ADMIN = 4;
 
-    public $avatar;//большая аватарка
-    public $icon;//маленькая иконка, задать default
+    public $avatar;
+
+    public function pathToUserFolder() {
+        return 'files/users/' . $this->id_user;
+    }
+
+    public function pathToAvatar() {
+        return $this->pathToUserFolder() . '/avatar/' . $this->username . '.jpg';
+    }
+
+    public function getOnline() {
+        $past = \Yii::$app->formatter->asTimestamp(date_create()) - 180;
+        return ($this->last_visit < $past) ? false : true;
+    }
 
     public function behaviors()
     {
@@ -49,6 +64,19 @@ class User extends ActiveRecord implements IdentityInterface
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created',
                 'updatedAtAttribute' => 'updated',
+            ],
+            GenderBehavior::className(),
+            [
+                'class' => AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_VALIDATE => 'birthday',
+                ],
+                'value' => function ($event) {
+                    if (!empty($event->sender->birthday)) {
+                        return \Yii::$app->formatter->asDate($event->sender->birthday, 'php:Y-m-d');
+                    }
+                    else return false;
+                },
             ],
         ];
     }
@@ -63,6 +91,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             'id_user'              => 'ID пользователя',
             'username'             => 'Логин',
+            'avatar'               => 'Аватар',
             'email'                => 'Почта',
             'pass'                 => 'Пароль-хэш',
             'role'                 => 'Роль',
@@ -116,6 +145,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function getRoleArray() {
         return [
             self::ROLE_USER      => 'Пользователь',
+            self::ROLE_AUTHOR    => 'Автор',
             self::ROLE_MODERATOR => 'Модератор',
             self::ROLE_ADMIN     => 'Администратор',
         ];
@@ -125,6 +155,10 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->roleArray[$this->role];
     }
 
+    public function getGenderName() {
+        return $this->genderArray[$this->gender];
+    }
+
     public function rules()
     {
         return [
@@ -132,7 +166,36 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'in', 'range' => array_keys($this->statusArray)],
             ['role', 'default', 'value' => self::ROLE_USER],
             ['role', 'in', 'range' => array_keys($this->roleArray)],
+            ['avatar', 'image', 'extensions' => ['jpg', 'png', 'gif'], 'mimeTypes' => ['image/jpeg', 'image/png', "image/gif"],
+            'minSize' => 1, 'maxSize' => 1024 * 1024* 5],
+            ['gender', 'in', 'range' => array_keys($this->genderArray)],
+            ['birthday', 'safe']
         ];
+    }
+
+    public function scenarios()
+    {
+        return [
+            self::SCENARIO_DEFAULT => ['username', 'email', 'pass', 'role'],
+            'rules'                => ['role', 'status'],
+            'register'             => ['username', 'email', 'pass', 'role'],
+            'updateUser'           => ['gender', 'birthday'],
+        ];
+    }
+
+    public function getAvatarArray()
+    {
+        if (is_file(\Yii::$app->basePath . '/web/' . $this->pathToAvatar())) {
+            return [
+                'src' => '/' . $this->pathToAvatar(),
+                'alt' => $this->username,
+            ];
+        } else {
+            return [//аватарка по умолчанию
+                'src' => '/files/users/noavatar.jpg',
+                'alt' => 'no-avatar',
+            ];
+        }
     }
 
     public static function findIdentity($id)
@@ -154,8 +217,7 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findByUsername($username)
     {
         return static::find()
-            ->where(['username' => $username])
-            ->orWhere(['email' => $username])
+            ->where(['or', ['username' => $username], ['email' => $username]])
             ->andWhere(['status' => self::STATUS_ACTIVE])
             ->one();
     }

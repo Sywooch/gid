@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8314a34eb8e2943eaeba5b93fb680d7d",
+    "hash": "2e3a08ee196b331cc64dfc2a16601e6d",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -127,16 +127,16 @@
         },
         {
             "name": "bower-asset/jquery.inputmask",
-            "version": "3.1.38",
+            "version": "3.1.40",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RobinHerbots/jquery.inputmask.git",
-                "reference": "464cddbdea65411896468f40321e68abcc75a34c"
+                "reference": "b8f06eef3ccf9b8009607f30d47f66133670afc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RobinHerbots/jquery.inputmask/zipball/464cddbdea65411896468f40321e68abcc75a34c",
-                "reference": "464cddbdea65411896468f40321e68abcc75a34c",
+                "url": "https://api.github.com/repos/RobinHerbots/jquery.inputmask/zipball/b8f06eef3ccf9b8009607f30d47f66133670afc2",
+                "reference": "b8f06eef3ccf9b8009607f30d47f66133670afc2",
                 "shasum": ""
             },
             "require": {
@@ -787,22 +787,28 @@
         },
         {
             "name": "mihaildev/yii2-ckeditor",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MihailDev/yii2-ckeditor.git",
-                "reference": "b515a125c0e4cf432c947182da20fa018276676f"
+                "reference": "d20aa7f6bcf610fee226d6eb15212a279875bf87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MihailDev/yii2-ckeditor/zipball/b515a125c0e4cf432c947182da20fa018276676f",
-                "reference": "b515a125c0e4cf432c947182da20fa018276676f",
+                "url": "https://api.github.com/repos/MihailDev/yii2-ckeditor/zipball/d20aa7f6bcf610fee226d6eb15212a279875bf87",
+                "reference": "d20aa7f6bcf610fee226d6eb15212a279875bf87",
                 "shasum": ""
             },
             "require": {
                 "yiisoft/yii2": "*"
             },
             "type": "yii2-extension",
+            "extra": {
+                "asset-installer-paths": {
+                    "npm-asset-library": "vendor/npm",
+                    "bower-asset-library": "vendor/bower"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "mihaildev\\ckeditor\\": ""
@@ -828,20 +834,20 @@
                 "wysiwyg",
                 "yii"
             ],
-            "time": "2014-10-15 21:58:27"
+            "time": "2014-11-19 22:04:08"
         },
         {
             "name": "mihaildev/yii2-elfinder",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MihailDev/yii2-elfinder.git",
-                "reference": "fd60186e3c029278cf7a2ba6bd120bfdbb667449"
+                "reference": "d3d826bb54181239cf8cc0f9455e2808307338c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MihailDev/yii2-elfinder/zipball/fd60186e3c029278cf7a2ba6bd120bfdbb667449",
-                "reference": "fd60186e3c029278cf7a2ba6bd120bfdbb667449",
+                "url": "https://api.github.com/repos/MihailDev/yii2-elfinder/zipball/d3d826bb54181239cf8cc0f9455e2808307338c4",
+                "reference": "d3d826bb54181239cf8cc0f9455e2808307338c4",
                 "shasum": ""
             },
             "require": {
@@ -872,7 +878,7 @@
                 "filemanager",
                 "yii"
             ],
-            "time": "2014-10-26 20:05:19"
+            "time": "2014-11-22 21:35:57"
         },
         {
             "name": "phpspec/php-diff",

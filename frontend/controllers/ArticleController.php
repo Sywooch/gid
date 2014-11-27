@@ -109,36 +109,8 @@ class ArticleController extends Controller
                 return commentTree($comment);
             }
             else return false;
-
-
-
-            /*Yii::$app->response->format = 'json';
-            if($model->save()) {
-                return ['message' => 'Success!'];
-            } else {
-                return ActiveForm::validate($model);;
-            }*/
-
-
-
-            /*$request = Yii::$app->request;
-            $model = new Model();
-            if ($request->isAjax && $model->load($request->post())) {
-                Yii::$app->response->format = Response::FORMAT_JSON;
-
-                return ActiveForm::validate($model);
-            } elseif ($model->load($request->post()) && $model->save()) {
-                return ['message' => 'Success!'];
-            } else {
-                return $this->renderAjax('create', [
-                    'model' => $model,
-                ]);
-            }*/
-
-
-
         } else {
-            throw new ForbiddenHttpException('У вас нет прав доступа.');
+            throw new ForbiddenHttpException('Доступ запрещен.');
         }
     }
 }

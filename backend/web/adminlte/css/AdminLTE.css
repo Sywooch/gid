@@ -1316,10 +1316,10 @@ body > .header .logo .icon {
 .small-box .icon {
   position: absolute;
   top: auto;
-  bottom: 5px;
+  bottom: 10px;
   right: 5px;
   z-index: 0;
-  font-size: 90px;
+  font-size: 70px;
   color: rgba(0, 0, 0, 0.15);
 }
 .small-box:hover {
@@ -1345,18 +1345,18 @@ body > .header .logo .icon {
 }
 @keyframes tansformAnimation {
   from {
-    font-size: 90px;
+    font-size: 70px;
   }
   to {
-    font-size: 100px;
+    font-size: 85px;
   }
 }
 @-webkit-keyframes tansformAnimation {
   from {
-    font-size: 90px;
+    font-size: 70px;
   }
   to {
-    font-size: 100px;
+    font-size: 85px;
   }
 }
 @media screen and (max-width: 480px) {

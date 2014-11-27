@@ -1,12 +1,14 @@
 <?php
 
-namespace backend\controllers;
+namespace frontend\controllers;
 
 use Yii;
 use common\models\User;
-use backend\models\UserSearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
+use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
 
 /**
@@ -32,11 +34,11 @@ class UserController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new UserSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => User::find(),
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -46,30 +48,11 @@ class UserController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
+    public function actionView($username)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel($username),
         ]);
-    }
-
-    /**
-     * Creates a new User model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new User();
-        $model->scenario = 'rules';
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_user]);
-        } else {
-            return $this->render('form', [
-                'model' => $model,
-            ]);
-        }
     }
 
     /**
@@ -78,16 +61,34 @@ class UserController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionUpdate($username)
     {
-        $model = $this->findModel($id);
+        $model = $this->findModel($username);
+        $model->scenario = 'updateUser';
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_user]);
+        if ($model->id_user == Yii::$app->user->identity->id) {
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+
+                $model->avatar = UploadedFile::getInstance($model, 'avatar');
+
+                if (!is_null($model->avatar)) {
+
+                    if (!is_dir($model->pathToUserFolder() . '/avatar/'))
+                        mkdir($model->pathToUserFolder() . '/avatar/', 766, true);
+
+                    $model->avatar->saveAs($model->pathToUserFolder() . '/avatar/' . $model->username . '.jpg');
+                }
+
+                return $this->redirect(['view', 'username' => $model->username]);
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
         } else {
-            return $this->render('form', [
-                'model' => $model,
-            ]);
+            throw new ForbiddenHttpException('Доступ запрещен.');
         }
     }
 
@@ -97,9 +98,12 @@ class UserController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete($username)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($username);
+
+        $model->status = $model::STATUS_DELETED;
+        $model->save();
 
         return $this->redirect(['index']);
     }
@@ -111,9 +115,9 @@ class UserController extends Controller
      * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel($username)
     {
-        if (($model = User::findOne($id)) !== null) {
+        if (($model = User::findByUsername($username)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('Пользователь не найден.');

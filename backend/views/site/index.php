@@ -1,52 +1,100 @@
 <?php
 /**
  * @var $this yii\web\View
+ * @var $users yii\data\ActiveDataProvider
+ * @var $comments yii\data\ActiveDataProvider
  */
+use yii\grid\GridView;
+use backend\widgets\SmallBoxWidget;
 
-$this->title = 'Music-Gid: админка';
+$this->title = 'Контрольная панель';
 ?>
 
 <div class="site-index">
 
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
+    <div class="row">
+        <?= SmallBoxWidget::widget([
+            'color'     => 'bg-aqua',
+            'header'    => $articlesCount,
+            'paragraph' => 'статей',
+            'icon'      => 'glyphicon glyphicon-book',
+            'link'      => '/article/index',
+        ])?>
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
+        <?= SmallBoxWidget::widget([
+            'color'     => 'bg-green',
+            'header'    => $commentsCount,
+            'paragraph' => 'комментариев',
+            'icon'      => 'glyphicon glyphicon-comment',
+            'link'      => '/article-comment/index',
+        ])?>
 
-        <p>Get started with Yii</p>
+        <?= SmallBoxWidget::widget([
+            'color'     => 'bg-yellow',
+            'header'    => $usersCount,
+            'paragraph' => 'пользователя',
+            'icon'      => 'glyphicon glyphicon-user',
+            'link'      => '/user/index',
+        ])?>
+
+        <?= SmallBoxWidget::widget([
+            'header'    => '???',
+            'paragraph' => '???',
+        ])?>
     </div>
 
-    <div class="body-content">
 
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
+    <div class="col-md-6">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Последние 5 зарегистрированных пользователей</h3>
             </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
+            <div class="box-body">
+                <?= GridView::widget([
+                    'dataProvider' => $users,
+                    'layout'       => "{items}",
+                    'columns' => [
+                        ['class' => 'yii\grid\SerialColumn'],
+                        'username',
+                        [
+                            'attribute' => 'created',
+                            'value' => function($model) {
+                                return Yii::$app->formatter->asDatetime($model->created);
+                            }
+                        ]
+                    ],
+                ]) ?>
             </div>
         </div>
-
     </div>
+
+    <div class="col-md-6">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Последние 5 комментариев</h3>
+            </div>
+            <div class="box-body">
+                <?= GridView::widget([
+                    'dataProvider' => $comments,
+                    'layout'       => "{items}",
+                    'columns' => [
+                        'id_comment',
+                        [
+                            'attribute' => 'id_article',
+                            'value' => function($model) {
+                                return $model->article->title;
+                            }
+                        ],
+                        [
+                            'attribute' => 'created',
+                            'value' => function($model) {
+                                return Yii::$app->formatter->asDatetime($model->created);
+                            }
+                        ]
+                    ],
+                ]) ?>
+            </div>
+        </div>
+    </div>
+
 </div>

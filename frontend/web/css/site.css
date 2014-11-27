@@ -22,22 +22,12 @@ body {
     padding-top: 20px;
 }
 
-.jumbotron {
-    text-align: center;
-    background-color: #AD99CC;
-}
-
-.jumbotron .btn {
-    font-size: 21px;
-    padding: 14px 24px;
-}
-
 .not-set {
     color: #c55;
     font-style: italic;
 }
 
-/* add sorting icons to gridview sort links */
+/* Gridview sort links */
 a.asc:after, a.desc:after {
     position: relative;
     top: 1px;
@@ -108,10 +98,19 @@ a.desc:after {
     border-color: #381B63;
 }
 
-.navbar-inverse .navbar-nav > .active > a,
-.navbar-inverse .navbar-nav > .active > a:hover,
-.navbar-inverse .navbar-nav > .active > a:focus {
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .open > a:hover,
+.navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .open > a:focus,
+.navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus{
     background-color: #381B63;
+}
+
+.navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
+    color: #9DA1CD;
+}
+
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+    background-color: #e2d9ff;
 }
 
 .navbar-brand {

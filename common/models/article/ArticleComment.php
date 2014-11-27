@@ -63,7 +63,6 @@ class ArticleComment extends ActiveRecord
             'id_parent'  => 'Родительский комментарий',
             'id_article' => 'Статья',
             'id_user'    => 'Пользователь',
-            'title'      => 'Заголовок',
             'text'       => 'Текст',
             'status'     => 'Статус',
             'created'    => 'Создано',

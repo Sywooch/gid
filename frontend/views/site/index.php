@@ -7,27 +7,38 @@ use yii\bootstrap\Carousel;
 /**
  * @var $this yii\web\View
  * @var $articles common\models\article\Article
+ * @var $popularArticles common\models\article\Article
  */
 $this->title = 'Музыкальный Гид';
+
+$this->registerCss('
+    .carousel {
+        background-color: #AD99CC;
+        margin-bottom: 5px;
+    }
+    .carousel a{
+        color: #fff;
+    }
+    .item img{
+        margin:auto;
+        max-height: 400px;
+    }
+');
 ?>
 <div class="site-index">
 
-    <div class="jumbotron">
-        <?= Carousel::widget([
-            'items' => [
-                [
-                    'content' => '<img src="http://www.kinokadr.ru/filmzimg/i/interstellar/gallery/01.jpg"/>',
-                    'caption' => '<h4>This is title</h4><p>This is the caption text</p>',
-                ],
-                [
-                    'content' => '<img src="http://www.kinokadr.ru/filmzimg/i/interstellar/gallery/02.jpg"/>',
-                    'caption' => '<h4>This is title</h4><p>This is the caption text</p>',
-                    //'options' => [...],
-                ],
-            ],
-            //'options' => ['class' => 'text-center'],
-        ]);?>
-    </div>
+    <?php
+        foreach($popularArticles as $article) {
+            $items[] = [
+                'content' => '<img src="' . $article->image . '">',
+                'caption' => '<h4>' . Html::a($article->title, ['/article/view', 'alias' =>$article->alias], ['target' => '_blank']) . '</h4>',
+            ];
+        }
+    ?>
+
+    <?= Carousel::widget([
+        'items' => $items,
+    ])?>
 
     <div class="body-content">
 
@@ -35,11 +46,13 @@ $this->title = 'Музыкальный Гид';
 
             <?php foreach($articles as $article) { ?>
 
-            <div class="col-sm-4 col-xs-6">
+            <div class="col-sm-4 col-xs-6 thumbnail">
 
-                <h2><?= Html::a($article->title, ['/article/view', 'alias' => $article->alias]) ?></h2>
+                <?= Html::img($article->image, ['alt' => $article->title]) ?>
 
                 <?= Html::tag('time', \Yii::$app->formatter->asDate($article->publication), ['datetime' => \Yii::$app->formatter->asDatetime($article->publication)]) ?>
+
+                <h2><?= Html::a($article->title, ['/article/view', 'alias' => $article->alias]) ?></h2>
 
                 <p><?= $article->preview ?></p>
 

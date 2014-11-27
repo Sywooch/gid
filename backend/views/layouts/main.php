@@ -60,7 +60,7 @@ $this->registerJs("
                         <ul class="dropdown-menu">
 
                             <li class="user-header bg-light-blue">
-                                <img src="#" class="img-circle" alt="User Image">
+                                <img src="<?= Yii::getAlias('@frontendUrl') . '/' . Yii::$app->user->identity->pathToAvatar()?>" class="img-circle" alt="User Image">
                                 <p>
                                     <?= Yii::$app->user->identity->username ?>
                                     <small>На сайте с <?= Yii::$app->formatter->asDatetime(Yii::$app->user->identity->created) ?></small>

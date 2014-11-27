@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+
 /**
  * Created by PhpStorm.
  * User: Дмитрий
@@ -8,15 +9,16 @@ use yii\helpers\Html;
  * Time: 22:55
  *
  * @var $comment common\models\article\ArticleComment
+ * @return null
  */
 function commentTree($comment, $margin = 0) { ?>
 
     <div id="comment-<?= $comment->id_comment ?>" style="margin-left: <?= $margin?>%">
         <div class="comment-content">
             <div class="comment-header">
-                <img src="/images/cover.jpg" alt="..." width='32' height='32' class="img-circle avatar">
+                <img src="<?= $comment->user->avatarArray['src'] ?>" alt="<?= $comment->user->avatarArray['alt'] ?>" width='32' height='32' class="img-circle avatar">
                 <?=
-                Html::a($comment->user->username, ['user/view', 'name' => $comment->user->username]) . ' ' .
+                Html::a($comment->user->username, ['user/view', 'username' => $comment->user->username]) . ' ' .
                 Yii::$app->formatter->asDatetime($comment->created) . ' ' .
                 Html::a('#', '#comment-' . $comment->id_comment)
                 ?>

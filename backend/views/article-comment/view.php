@@ -30,6 +30,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id_comment',
             [
+                'label' => 'URL',
+                'format' => 'raw',
+                'value' => Html::a('Перейти к комментарию',
+                    \Yii::getAlias('@frontendUrl') . '/article/' . $model->article->alias . '.html#comment-' . $model->id_comment,
+                    ['target' => '_blank'])
+            ],
+            [
                 'attribute' => 'id_parent',
                 'format' => 'html',
                 'value' => ($model->id_parent) ?
@@ -49,6 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'text:ntext',
             [
                 'attribute' => 'status',
+                'format' => 'html',
                 'value' => $model->statusText,
             ],
             [

@@ -59,6 +59,7 @@ class SignupForm extends Model
     {
         if ($this->validate()) {
             $user = new User();
+            $user->scenario = 'register';
             $user->username = $this->username;
             $user->email = $this->email;
             $user->setPassword($this->password);

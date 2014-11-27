@@ -61,12 +61,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= Yii::$app->formatter->asNtext($article->text)?>
+    <?= $article->text?>
 
 
     <section id="comments">
 
-        <h3>Комментарии (<?= $article->commentsCount?>)</h3>
+        <h3><span class="glyphicon glyphicon-comment" style="vertical-align: bottom;"></span> Комментарии (<?= $article->commentsCount?>):</h3>
 
         <?php if (Yii::$app->user->isGuest)  { ?>
 

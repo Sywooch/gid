@@ -42,7 +42,8 @@ return [
 
                 'article/add-comment'                          => 'article/add-comment',
                 'article/<alias:[a-zA-Z0-9-]+>'                => 'article/view',
-
+                'user/<username:[a-zA-Z0-9-]+>'                => 'user/view',
+                'user/<username:[a-zA-Z0-9-]+>/<action>'       => 'user/<action>',
 
                 '<controller:[A-Za-z0-9-]+>/<action>/<id:\d+>' => '<controller>/<action>',
             ]

@@ -43,9 +43,19 @@ AppAsset::register($this);
                 $menuItems[] = ['label' => 'Вход', 'url' => ['/site/login']];
             } else {
                 $menuItems[] = [
-                    'label' => 'Выйти (' . Yii::$app->user->identity->username . ')',
-                    'url' => ['/site/logout'],
-                    'linkOptions' => ['data-method' => 'post']
+                    'label' => Yii::$app->user->identity->username,
+                    'url' => ['#'],
+                    'items' => [
+                        [
+                            'label' => 'Профиль',
+                            'url' => ['/user/view', 'username' => Yii::$app->user->identity->username],
+                        ],
+                        [
+                            'label' => 'Выйти',
+                            'url' => ['/site/logout'],
+                            'linkOptions' => ['data-method' => 'post'],
+                        ],
+                    ],
                 ];
             }
             echo Nav::widget([

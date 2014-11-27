@@ -27,7 +27,7 @@ class m130524_201442_init extends Migration
             'last_visit'           => Schema::TYPE_INTEGER . " NOT NULL COMMENT 'Дата последнего посещения'",
             'auth_key'             => Schema::TYPE_STRING . "(32) COMMENT 'Ключ аутентификации'",
             'email_confirm_token'  => Schema::TYPE_STRING . " COMMENT 'Токен подтверждения почты'",
-            'password_reset_token' => Schema::TYPE_STRING . " COMMENT 'Токен нового пароля'",//TODO ?
+            'password_reset_token' => Schema::TYPE_STRING . " COMMENT 'Токен нового пароля'",
         ], $tableOptions);
 
         // Обратная связь
@@ -602,6 +602,7 @@ class m130524_201442_init extends Migration
         $this->createTable('{{%articles}}', [
             'id_article'      => Schema::TYPE_PK . " COMMENT 'ID статьи'",
             'id_category'     => "TINYINT(3) NOT NULL COMMENT 'ID категории'",
+            'image'           => Schema::TYPE_STRING . " NULL COMMENT 'Главное изображение'",
             'title'           => Schema::TYPE_STRING . " NOT NULL COMMENT 'Заголовок'",
             'alias'           => Schema::TYPE_STRING . " NOT NULL COMMENT 'Алиас'",
             'preview'         => Schema::TYPE_TEXT . " COMMENT 'Превью'",

@@ -13,4 +13,7 @@ return [
             'ruleFile'       => '@common/components/rbac/rules.php'
         ],
     ],
+    'as beforeAction' => [
+        'class' => '\common\components\LastVisitBehavior'
+    ],
 ];
