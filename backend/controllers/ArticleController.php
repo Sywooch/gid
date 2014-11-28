@@ -3,10 +3,13 @@
 namespace backend\controllers;
 
 use Yii;
+use yii\base\Model;
 use common\models\article\Article;
+use common\models\article\ArticleParam;
 use backend\models\article\ArticleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 use yii\filters\VerbFilter;
 
 /**
@@ -80,12 +83,23 @@ class ArticleController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $params = ArticleParam::find()->where(['id_article' => $model->id_article])->all();
+
+        //except
+        //if ($products->except != '')
+            //$query->andWhere("{{%shop_products}}.id_product NOT IN ($products->except)");
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if (Model::loadMultiple($params, Yii::$app->request->post()) && Model::validateMultiple($params)) {
+                foreach ($params as $param) {
+                    $param->save(false);
+                }
+            }
             return $this->redirect(['view', 'id' => $model->id_article]);
         } else {
             return $this->render('form', [
-                'model' => $model,
+                'model'  => $model,
+                'params' => $params,
             ]);
         }
     }
@@ -103,6 +117,16 @@ class ArticleController extends Controller
         $model->save();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionDeleteParameter($article, $param)
+    {
+        if (Yii::$app->request->isAjax) {
+            ArticleParam::findOne(['id_article' => $article, 'id_param' => $param])->delete();
+            return true;
+        } else {
+            throw new ForbiddenHttpException('Доступ запрещен.');
+        }
     }
 
     /**

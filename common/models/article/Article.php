@@ -99,8 +99,9 @@ class Article extends ActiveRecord
             [['preview', 'text', 'alias'], 'string'],
             ['alias', 'unique'],
             [['publication', 'end'] , 'safe'],
-            ['status', 'in', 'range' => [self::STATUS_NOT_PUBLISHED, self::STATUS_PUBLISHED]],
+            ['status', 'in', 'range' => array_keys($this->statusArray)],
             ['active', 'boolean'],
+            ['image', 'url'],
         ];
     }
 
@@ -111,6 +112,7 @@ class Article extends ActiveRecord
             'id_category'     => 'Категория',
             'title'           => 'Название',
             'alias'           => 'Алиас',
+            'image'           => 'Главное изображение',
             'preview'         => 'Превью',
             'text'            => 'Текст',
             'status'          => 'Статус',
@@ -133,7 +135,7 @@ class Article extends ActiveRecord
         ];
     }
 
-    public function getStatusText() {
+    public function getStatusName() {
         return $this->statusArray[$this->status];
     }
 
@@ -152,8 +154,8 @@ class Article extends ActiveRecord
         }
     }
 
-    public function getStatusSpan() {
-        return "<span class='label " . $this->statusClass . "'>" . $this->statusText . '</span>';
+    public function getStatusText() {
+        return "<span class='label " . $this->statusClass . "'>" . $this->statusName . '</span>';
     }
 
     public function getCategory() {
@@ -172,11 +174,11 @@ class Article extends ActiveRecord
         return $this->hasMany(ArticleComment::className(), ['id_article' => 'id_article']);
     }
 
-    public function getCommentsCount() {
-        return $this->getComments()->count();
+    public function getParams() {
+        return $this->hasMany(ArticleParam::className(), ['id_article' => 'id_article']);
     }
 
-    public function saveViews() {
+    public function getCommentsCount() {
         return $this->getComments()->count();
     }
 }

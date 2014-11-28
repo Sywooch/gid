@@ -6,7 +6,9 @@ use yii\helpers\ArrayHelper;
 use common\models\article\ArticleCategory;
 use dosamigos\datetimepicker\DateTimePicker;
 use mihaildev\ckeditor\CKEditor;
+use mihaildev\elfinder\InputFile;
 
+use backend\assets\AppAsset;
 use common\models\article\ArticleParam;
 
 /**
@@ -14,6 +16,10 @@ use common\models\article\ArticleParam;
  * @var $model common\models\article\Article
  * @var $form yii\bootstrap\ActiveForm
  */
+
+$assets = Yii::$app->assetManager->publish('@backend/views/assets/js');
+$bundle = AppAsset::register($this);
+$bundle->js[] =  Yii::$app->homeUrl . $assets[1] . '/article.js';
 
 $this->params['breadcrumbs'][] = ['label' => 'Статьи', 'url' => ['index']];
 
@@ -42,7 +48,7 @@ $model->publication = ($model->publication) ? Yii::$app->formatter->asDateTime($
         ],
     ]); ?>
 
-    <div class="form-group">
+    <div class="form-group col-lg-offset-1 col-lg-11">
         <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Обновить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
@@ -54,6 +60,16 @@ $model->publication = ($model->publication) ? Yii::$app->formatter->asDateTime($
     <?= $form->field($model, 'title')->textInput(['maxlength' => 255]) ?>
 
     <?= $form->field($model, 'alias')->textInput(['maxlength' => 255]) ?>
+
+    <?= $form->field($model, 'image')->widget(InputFile::className(), [
+        'language'      => 'ru',
+        'controller'    => 'elfinder',
+        'filter'        => 'image',
+        'template'      => '<div class="input-group">{input}<span class="input-group-btn">{button}</span></div>',
+        'options'       => ['class' => 'form-control'],
+        'buttonOptions' => ['class' => 'btn btn-default'],
+        'multiple'      => false
+    ]) ?>
 
     <?= $form->field($model, 'preview')->widget(CKEditor::className(), [
         'editorOptions' => [
@@ -86,11 +102,29 @@ $model->publication = ($model->publication) ? Yii::$app->formatter->asDateTime($
 
     <?= $form->field($model, 'end')->widget(DateTimePicker::className(), $dateTimePicker) ?>
 
-    <?php foreach ($model->params as $params ) { ?>
+    <section>
 
-        <?= $form->field($params, 'value')->textInput(['maxlength' => 255])->label('sd')  ?>
+        <h3>Дополнительные параметры</h3>
 
-    <?php } ?>
+        <?php foreach ($params as $index => $param) { ?>
+
+            <div>
+
+            <?= $form->field($param, "[$index]id_article", ['template' => '{input}', 'inputOptions' => ['class' => 'articleInput']])->hiddenInput() ?>
+
+            <?= $form->field($param, "[$index]id_param", ['template' => '{input}', 'inputOptions' => ['class' => 'paramInput']])->hiddenInput() ?>
+
+            <?= $form->field($param, "[$index]value", [
+                    'inputTemplate' => "<div>{input}<a href='#' class='delParam'><span class='glyphicon glyphicon-remove'></span></a></div>",
+                    'wrapperOptions' => ['class' => "col-sm-8"],
+                ])
+                ->textInput(['maxlength' => 255])->label($param->parameterUnique->name) ?>
+
+            </div>
+
+        <?php } ?>
+
+    </section>
 
     <?php ActiveForm::end(); ?>
 

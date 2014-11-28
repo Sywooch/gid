@@ -10,6 +10,7 @@ return [
     'id' => 'app-backend',
     'name' => 'Music-Gid',
     'basePath' => dirname(__DIR__),
+    'homeUrl' => 'http://admin.music-gid.ru',
     'controllerNamespace' => 'backend\controllers',
     'aliases' => [
         '@frontendUrl' => 'http://music-gid.ru',

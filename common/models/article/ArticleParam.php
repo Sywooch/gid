@@ -3,6 +3,7 @@
 namespace common\models\article;
 
 use yii\db\ActiveRecord;
+use common\models\param\ParameterUnique;
 
 /**
  * This is the model class for table "{{%article_params}}".
@@ -21,9 +22,9 @@ class ArticleParam extends ActiveRecord
     public function rules()
     {
         return [
-            [['id_article', 'id_param'], 'required'],
+            [['id_article', 'id_param', 'value'], 'required'],
             [['id_article', 'id_param'], 'integer'],
-            [['value'], 'string', 'max' => 255]
+            ['value', 'string', 'max' => 255]
         ];
     }
 
@@ -35,4 +36,21 @@ class ArticleParam extends ActiveRecord
             'value'      => 'Значение параметра',
         ];
     }
+
+    public function getParameterUnique() {
+
+        return $this->hasOne(ParameterUnique::className(), ['id_param' => 'id_param'])
+            //->where([
+                //'name' => ['Мета-тег description'],
+            //])
+            ;
+    }
+
+    /*public function getParameterArray() {
+        foreach ($this->ParameterUnique as $param)
+            $array[] = [$param->id_param =>
+        return [
+
+        ]
+    }*/
 }

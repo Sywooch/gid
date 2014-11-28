@@ -21,8 +21,8 @@ class ParameterUnique extends ActiveRecord
     {
         return [
             [['id_param', 'name'], 'required'],
-            [['id_param'], 'integer'],
-            [['name'], 'string', 'max' => 255]
+            ['id_param', 'integer'],
+            ['name', 'string', 'max' => 255]
         ];
     }
 
