@@ -11,6 +11,13 @@ use yii\bootstrap\Carousel;
  */
 $this->title = 'Музыкальный Гид';
 
+$this->registerLinkTag([
+    'title' => 'Музыкальный гид: блог',
+    'rel'   => 'alternate',
+    'type'  => 'application/rss+xml',
+    'href'  => '/rss.xml',
+]);
+
 $this->registerCss('
     .carousel {
         background-color: #AD99CC;
@@ -50,7 +57,10 @@ $this->registerCss('
 
                 <?= Html::img($article->image, ['alt' => $article->title]) ?>
 
-                <?= Html::tag('time', \Yii::$app->formatter->asDate($article->publication), ['datetime' => \Yii::$app->formatter->asDatetime($article->publication)]) ?>
+                <?php
+                    $public = \Yii::$app->formatter->asDate($article->publication, 'long');
+                    echo Html::tag('time', $public, ['datetime' => $public])
+                ?>
 
                 <h2><?= Html::a($article->title, ['/article/view', 'alias' => $article->alias]) ?></h2>
 
