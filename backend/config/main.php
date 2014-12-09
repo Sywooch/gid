@@ -31,7 +31,6 @@ return [
         ]
     ],
     'bootstrap' => ['log'],
-    'language' => 'ru',
     'modules' => [],
     'components' => [
         'user' => [

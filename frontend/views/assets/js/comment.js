@@ -56,6 +56,7 @@ $(function () {
                 dataType: "html",
                 data: selectForm.serialize(),
                 success: function(data) {
+                    var addComment;
 
                     if (form == '#replyComment') {
 
@@ -68,15 +69,20 @@ $(function () {
                         var childs = $('[data-parent = comment-' + id + ']');
                         childs.append(data);
 
-                        $('[data-parent = comment-' + id + '] > div').last().prev().css('margin-left', margin + '%');
+                        addComment = $('[data-parent = comment-' + id + '] > div').last().prev();
+                        addComment.css('margin-left', margin + '%');
 
                         deleteForm ();
                     }
                     else {
                         $('#comments-list').append(data);
+                        addComment = $('.comment-content').last().parent();
                         selectForm[0].reset();
                     }
                     button.removeClass('disabled');
+                    //Скроллинг
+                    var scroll = addComment.offset().top;
+                    $(document).scrollTop(scroll - 100);
                 }
             });
         }
@@ -86,5 +92,4 @@ $(function () {
     function deleteForm () {
         $('#replyComment').remove();
     }
-//Спуск до новоо коммента TODO
 });
