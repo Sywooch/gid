@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use common\models\article\ArticleCategory;
 
 /**
- * ArticleCategorySearch represents the model behind the search form about `app\models\article\ArticleCategory`.
+ * ArticleCategorySearch represents the model behind the search form about `common\article\ArticleCategory`.
  */
 class ArticleCategorySearch extends ArticleCategory
 {

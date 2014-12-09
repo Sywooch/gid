@@ -26,7 +26,7 @@ $this->registerCss("
     }
 ");
 
-$model->birthday = ($model->birthday) ? Yii::$app->formatter->asDateTime($model->birthday, 'php:d.m.Y') : '';
+$model->birthday = ($model->birthday != '0000-00-00') ? Yii::$app->formatter->asDateTime($model->birthday, 'php:d.m.Y') : '';
 ?>
 
 <div class="user-form row">

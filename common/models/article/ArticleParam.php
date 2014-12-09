@@ -38,12 +38,7 @@ class ArticleParam extends ActiveRecord
     }
 
     public function getParameterUnique() {
-
-        return $this->hasOne(ParameterUnique::className(), ['id_param' => 'id_param'])
-            //->where([
-                //'name' => ['Мета-тег description'],
-            //])
-            ;
+        return $this->hasOne(ParameterUnique::className(), ['id_param' => 'id_param']);
     }
 
     /*public function getParameterArray() {

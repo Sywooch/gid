@@ -15,7 +15,14 @@ use frontend\assets\AppAsset;
  */
 
 $this->registerCss("
-    /*font-size: 18px;*/
+    h1 {
+        color: #6F5499;
+    }
+    #articleText p{
+        font-size: 18px;
+        line-height: 30px;
+        margin-bottom: 30px;
+    }
     ul {
         padding-left: 0;
         list-style: none;
@@ -45,13 +52,12 @@ $this->registerCss("
     }
 ");
 
-
-
 $assets = Yii::$app->assetManager->publish('@frontend/views/assets/js');
 $bundle = AppAsset::register($this);
 $bundle->js[] =  Yii::$app->homeUrl . $assets[1] . '/comment.js';
 
-
+if ($metaDesc)
+    $this->registerMetaTag(['name' => 'description', 'content' => $metaDesc->value], 'description');
 
 $this->title = $article->title;
 $this->params['breadcrumbs'][] = ['label' => 'Статьи', 'url' => ['index']];
@@ -61,8 +67,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $article->text?>
-
+    <div id="articleText">
+        <?= $article->text?>
+    </div>
 
     <section id="comments">
 

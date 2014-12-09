@@ -27,7 +27,7 @@ class ArticleCommentController extends Controller
     }
 
     /**
-     * Lists all ArticleComment models.
+     * Список всех комментариев
      * @return mixed
      */
     public function actionIndex()
@@ -42,7 +42,7 @@ class ArticleCommentController extends Controller
     }
 
     /**
-     * Displays a single ArticleComment model.
+     * Показать один комментарий
      * @param string $id
      * @return mixed
      */

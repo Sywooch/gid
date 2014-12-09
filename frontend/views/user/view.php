@@ -59,13 +59,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <? if ($model->genderName) { ?>
 
-        <p><b>Пол: </b><?= $model->genderName?></p>
+            <p><b>Пол: </b><?= $model->genderName?></p>
 
         <? } ?>
 
-        <? if (!is_null($model->birthday)) { ?>
+        <? if (($model->birthday != '0000-00-00')) { ?>
 
-        <p><b>День рождения: </b><?= \Yii::$app->formatter->asDate($model->birthday) ?></p>
+            <p><b>День рождения: </b><?= \Yii::$app->formatter->asDate($model->birthday) ?></p>
 
         <? } ?>
 

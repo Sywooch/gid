@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use common\models\article\Article;
 use common\models\article\ArticleComment;
+use common\models\article\ArticleParam;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
 use yii\web\Controller;
@@ -71,6 +72,16 @@ class ArticleController extends Controller
             //Обновляем количество просмотров
             $article->updateCounters(['views' => 1]);
 
+            //Параметры
+            $metaDesc = ArticleParam::find()
+                ->select('value')
+                ->innerJoinWith('parameterUnique')
+                ->where([
+                    'id_article' => $article->id_article,
+                    'name'       => 'Мета-тег description'
+                ])
+                ->one();
+
             $query = ArticleComment::find()
                 ->where(['id_parent' => null, 'id_article' => $article->id_article, 'status' => ArticleComment::STATUS_ACTIVE])
                 ->select(['id_comment', 'id_parent', 'id_user', 'text', 'created']);
@@ -86,6 +97,7 @@ class ArticleController extends Controller
                 'comments'   => $comments,
                 'newComment' => new ArticleComment,
                 'pages'      => $pages,
+                'metaDesc'   => $metaDesc,
             ]);
         } else {
             throw new NotFoundHttpException('Статья не найдена.');

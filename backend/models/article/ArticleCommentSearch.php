@@ -2,13 +2,12 @@
 
 namespace backend\models\article;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\article\ArticleComment;
 
 /**
- * ArticleCommentSearch represents the model behind the search form about `app\models\article\ArticleComment`.
+ * ArticleCommentSearch represents the model behind the search form about `common\models\ArticleComment`.
  */
 class ArticleCommentSearch extends ArticleComment
 {
