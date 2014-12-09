@@ -4,11 +4,11 @@ namespace backend\controllers;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\data\ActiveDataProvider;
 use backend\models\AdminLoginForm;
 use common\models\User;
 use common\models\article\ArticleComment;
 use common\models\article\Article;
-use yii\data\ActiveDataProvider;
 
 /**
  * Site controller
@@ -38,7 +38,7 @@ class SiteController extends Controller
 
     public function beforeAction($action)
     {
-        $this->layout = \Yii::$app->user->isGuest ? 'account' : 'main';
+        $this->layout = Yii::$app->user->isGuest ? 'account' : 'main';
         return parent::beforeAction($action);
     }
 
@@ -52,25 +52,28 @@ class SiteController extends Controller
 
         $commentsCount = ArticleComment::find()->count();
 
-
         $query = User::find()
             ->select(['username', 'created'])
             ->where(['status' => User::STATUS_ACTIVE])
-            ->orderBy(['created' => SORT_DESC])
-            ->limit(5);//limit не работает
+            ->orderBy(['created' => SORT_DESC]);
 
         $users = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 5
+            ],
         ]);
         $users->sort = false;
 
         $query = ArticleComment::find()
             ->select(['id_comment', 'id_article', 'created'])
-            ->orderBy(['created' => SORT_DESC])
-            ->limit(5);//limit не работает
+            ->orderBy(['created' => SORT_DESC]);
 
         $comments = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 5
+            ],
         ]);
         $comments->sort = false;
 
@@ -85,7 +88,7 @@ class SiteController extends Controller
 
     public function actionLogin()
     {
-        if (!\Yii::$app->user->isGuest) {
+        if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
