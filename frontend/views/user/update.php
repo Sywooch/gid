@@ -13,7 +13,7 @@ use frontend\assets\AppAsset;
 
 $this->title = 'Обновить профиль: ' . $model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Пользователи', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->username, 'url' => ['view', 'username' => $model->username]];
+$this->params['breadcrumbs'][] = ['label' => $model->username, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Обновить';
 
 $assets = Yii::$app->assetManager->publish('@frontend/views/assets/js');
@@ -47,7 +47,11 @@ $model->birthday = ($model->birthday != '0000-00-00') ? Yii::$app->formatter->as
 
         <? } ?>
 
-        <p><?= Html::a('Удалить профиль', ['delete', 'username' => $model->username], ['data-method' => "post", 'class' => 'btn btn-danger btn-sm btn-block']) ?></p>
+        <p><?= Html::a('Удалить профиль', ['delete', 'username' => $model->username], ['data' => [
+                'confirm' => 'Вы хотите удалить профиль?',
+                'method' => 'post',
+            ],
+            'class' => 'btn btn-danger btn-sm btn-block']) ?></p>
 
     </div>
 

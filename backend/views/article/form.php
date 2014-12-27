@@ -7,19 +7,29 @@ use common\models\article\ArticleCategory;
 use dosamigos\datetimepicker\DateTimePicker;
 use mihaildev\ckeditor\CKEditor;
 use mihaildev\elfinder\InputFile;
-
 use backend\assets\AppAsset;
-use common\models\article\ArticleParam;
 
 /**
  * @var $this yii\web\View
  * @var $model common\models\article\Article
+ * @var $paramUnique common\models\param\ParameterUnique
  * @var $form yii\bootstrap\ActiveForm
  */
 
 $assets = Yii::$app->assetManager->publish('@backend/views/assets/js');
 $bundle = AppAsset::register($this);
 $bundle->js[] =  Yii::$app->homeUrl . $assets[1] . '/article.js';
+
+$this->registerCss('
+    .articleParams .form-group {
+        margin-bottom: 1px;
+    }
+    .articleParamValue input {
+        display: inline;
+        width: 90% !important;
+        margin-right: 5px;
+    }
+');
 
 $this->params['breadcrumbs'][] = ['label' => 'Статьи', 'url' => ['index']];
 
@@ -39,6 +49,7 @@ $model->publication = ($model->publication) ? Yii::$app->formatter->asDateTime($
 <div class="article-form">
 
     <?php $form = ActiveForm::begin([
+        'id'     => 'articleForm',
         'layout' => 'horizontal',
         'fieldConfig' => [
             'horizontalCssClasses' => [
@@ -106,23 +117,21 @@ $model->publication = ($model->publication) ? Yii::$app->formatter->asDateTime($
 
         <h3>Дополнительные параметры</h3>
 
-        <?php foreach ($params as $index => $param) { ?>
+        <div id="searchParams">
 
-            <div>
+            <?= $this->render('_params_search', ['paramUnique' => $paramUnique])?>
 
-            <?= $form->field($param, "[$index]id_article", ['template' => '{input}', 'inputOptions' => ['class' => 'articleInput']])->hiddenInput() ?>
+        </div>
 
-            <?= $form->field($param, "[$index]id_param", ['template' => '{input}', 'inputOptions' => ['class' => 'paramInput']])->hiddenInput() ?>
+        <div id="parameters">
 
-            <?= $form->field($param, "[$index]value", [
-                    'inputTemplate' => "<div>{input}<a href='#' class='delParam'><span class='glyphicon glyphicon-remove'></span></a></div>",
-                    'wrapperOptions' => ['class' => "col-sm-8"],
-                ])
-                ->textInput(['maxlength' => 255])->label($param->parameterUnique->name) ?>
+            <?php if (!$model->isNewRecord) { ?>
 
-            </div>
+                <?= $this->render('_params', ['params' => $params])?>
 
-        <?php } ?>
+            <?php } ?>
+
+        </div>
 
     </section>
 

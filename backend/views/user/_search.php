@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
  */
 ?>
 
-<div class="user-search">
+<div class="user-search clearfix">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],

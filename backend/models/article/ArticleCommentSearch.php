@@ -7,15 +7,15 @@ use yii\data\ActiveDataProvider;
 use common\models\article\ArticleComment;
 
 /**
- * ArticleCommentSearch represents the model behind the search form about `common\models\ArticleComment`.
+ * ArticleCommentSearch - реализация поиска для модели `common\models\ArticleComment`
  */
 class ArticleCommentSearch extends ArticleComment
 {
-
     public function rules()
     {
         return [
-            [['id_comment', 'id_parent', 'id_article', 'id_user', 'status'], 'integer'],
+            [['id_comment', 'id_parent', 'status'], 'integer'],
+            [['id_article', 'id_user'], 'string'],
         ];
     }
 
@@ -29,7 +29,6 @@ class ArticleCommentSearch extends ArticleComment
      * Creates data provider instance with search query applied
      *
      * @param array $params
-     *
      * @return ActiveDataProvider
      */
     public function search($params)
@@ -44,13 +43,16 @@ class ArticleCommentSearch extends ArticleComment
             return $dataProvider;
         }
 
-        $query->andFilterWhere([
-            'id_comment' => $this->id_comment,
-            'id_parent'  => $this->id_parent,
-            'id_article' => $this->id_article,
-            'id_user'    => $this->id_user,
-            'status'     => $this->status,
-        ]);
+        $query->innerJoinWith('user')
+            ->innerJoinWith('article')
+            ->andFilterWhere([
+            'id_comment'                   => $this->id_comment,
+            'id_parent'                    => $this->id_parent,
+            '{{%article_comments}}.status' => $this->status,
+        ])
+            ->andFilterWhere(['like', '{{%articles}}.title', $this->id_article])
+            ->andFilterWhere(['like', '{{%users}}.username', $this->id_user])
+            ->select(['id_comment', 'id_parent', '{{%article_comments}}.id_article', '{{%article_comments}}.id_user', '{{%article_comments}}.status', '{{%article_comments}}.created']);
 
         return $dataProvider;
     }

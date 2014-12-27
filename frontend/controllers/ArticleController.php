@@ -6,6 +6,7 @@ use Yii;
 use common\models\article\Article;
 use common\models\article\ArticleComment;
 use common\models\article\ArticleParam;
+use common\models\article\ArticleCategory;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
 use yii\web\Controller;
@@ -64,7 +65,7 @@ class ArticleController extends Controller
                 'status' => Article::STATUS_PUBLISHED,
                 'active' => Article::OPTION_ACTIVE,
             ])
-            ->select(['title', 'text', 'publication', 'id_article'])
+            ->select(['title', 'text', 'publication', 'id_article', 'id_category'])
             ->one();
 
         if ($article !== null) {

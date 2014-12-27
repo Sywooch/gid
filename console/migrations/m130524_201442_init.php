@@ -309,7 +309,7 @@ class m130524_201442_init extends Migration
         $this->createTable('{{%user_album_vote}}', [
             'id_album' => Schema::TYPE_INTEGER . " COMMENT 'ID альбома'",
             'id_user'  => Schema::TYPE_INTEGER . " COMMENT 'ID пользователя'",
-            'rate'     => Schema::TYPE_DECIMAL . "(4,1) UNSIGNED NOT NULL COMMENT 'Оценка'",
+            'rate'     => Schema::TYPE_FLOAT . "(4,1) UNSIGNED NOT NULL COMMENT 'Оценка'",
             'date'     => Schema::TYPE_INTEGER . " NOT NULL COMMENT 'Дата'",
         ], $tableOptions);
 
@@ -422,7 +422,7 @@ class m130524_201442_init extends Migration
         $this->createTable('{{%user_song_vote}}', [
             'id_song' => Schema::TYPE_BIGINT . " COMMENT 'ID песни'",
             'id_user' => Schema::TYPE_INTEGER . " COMMENT 'ID пользователя'",
-            'rate'    => Schema::TYPE_DECIMAL . "(4,1) UNSIGNED NOT NULL COMMENT 'Оценка'",
+            'rate'    => Schema::TYPE_FLOAT . "(4,1) UNSIGNED NOT NULL COMMENT 'Оценка'",
             'date'    => Schema::TYPE_INTEGER . " NOT NULL COMMENT 'Дата'",
         ], $tableOptions);
 
@@ -622,6 +622,7 @@ class m130524_201442_init extends Migration
         $this->addForeignKey('fk_articles_created', '{{%articles}}', 'id_created_user', '{{%users}}', 'id_user', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_articles_updated', '{{%articles}}', 'id_updated_user', '{{%users}}', 'id_user', 'CASCADE', 'CASCADE');
         $this->createIndex('idx_article_title', '{{%articles}}', 'title');
+        $this->createIndex('idx_article_alias', '{{%articles}}', 'alias');
 
         //Комментарии к статьям
         $this->createTable('{{%article_comments}}', [

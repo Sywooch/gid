@@ -50,7 +50,7 @@ use common\models\article\ArticleCategory;
 
         <?= $form->field($model, 'status')->dropDownList($model->statusArray, ['prompt' => '']) ?>
 
-        <?= $form->field($model, 'active')->checkbox()->label('Корзина')?>
+        <?= $form->field($model, 'active')->checkbox()->label('Активна')?>
 
     </div>
 

@@ -59,7 +59,8 @@ $this->registerCss('
 
                 <?php
                     $public = \Yii::$app->formatter->asDate($article->publication, 'long');
-                    echo Html::tag('time', $public, ['datetime' => $public])
+                    echo Html::a($article->category->name, ['category/view', 'id' => $article->category->id_category]) . ' ' .
+                        Html::tag('time', $public, ['datetime' => $public]);
                 ?>
 
                 <h2><?= Html::a($article->title, ['/article/view', 'alias' => $article->alias]) ?></h2>

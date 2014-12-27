@@ -171,7 +171,8 @@ class Article extends ActiveRecord
     }
 
     public function getComments() {
-        return $this->hasMany(ArticleComment::className(), ['id_article' => 'id_article']);
+        return $this->hasMany(ArticleComment::className(), ['id_article' => 'id_article'])
+            ->where(['status' => ArticleComment::STATUS_ACTIVE]);
     }
 
     public function getParams() {

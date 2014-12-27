@@ -8,24 +8,18 @@ use yii\data\ActiveDataProvider;
 use common\models\User;
 
 /**
- * UserSearch represents the model behind the search form about `common\models\User`.
+ * UserSearch - реализация поиска для модели `common\models\User`
  */
 class UserSearch extends User
 {
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
-            [['id_user', 'role', 'status', 'gender', 'created', 'updated', 'last_visit'], 'integer'],
-            [['username', 'email', 'pass', 'birthday'], 'safe'],
+            [['id_user', 'role', 'status'], 'integer'],
+            [['username', 'email'], 'string'],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
@@ -36,7 +30,6 @@ class UserSearch extends User
      * Creates data provider instance with search query applied
      *
      * @param array $params
-     *
      * @return ActiveDataProvider
      */
     public function search($params)
@@ -53,18 +46,12 @@ class UserSearch extends User
 
         $query->andFilterWhere([
             'id_user' => $this->id_user,
-            'role' => $this->role,
-            'status' => $this->status,
-            'gender' => $this->gender,
-            'birthday' => $this->birthday,
-            'created' => $this->created,
-            'updated' => $this->updated,
-            'last_visit' => $this->last_visit,
+            'role'    => $this->role,
+            'status'  => $this->status,
         ]);
 
         $query->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'pass', $this->pass]);
+            ->andFilterWhere(['like', 'email', $this->email]);
 
         return $dataProvider;
     }

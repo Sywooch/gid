@@ -27,7 +27,8 @@
         "yiisoft/yii2-faker": "*",
         "2amigos/yii2-date-time-picker-widget" : "*",
         "mihaildev/yii2-ckeditor": "*",
-        "mihaildev/yii2-elfinder": "*"
+        "mihaildev/yii2-elfinder": "*",
+        "zelenin/yii2-rss": "dev-master"
     },
     "config": {
         "process-timeout": 1800

@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use common\models\article\Article;
 use common\models\article\ArticleParam;
+use common\models\param\ParameterUnique;
 use backend\models\article\ArticleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -66,10 +67,20 @@ class ArticleController extends Controller
         $model = new Article();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            foreach(Yii::$app->request->post('ArticleParam') as $param) {
+                $articleParam = new ArticleParam;
+                $articleParam->id_article = $model->id_article;
+                $articleParam->id_param = $param['id_param'];
+                $articleParam->value = $param['value'];
+                $articleParam->save();
+            }
             return $this->redirect(['view', 'id' => $model->id_article]);
         } else {
+            $paramUnique = ParameterUnique::find()->asArray()->all();
+
             return $this->render('form', [
                 'model' => $model,
+                'paramUnique' => $paramUnique,
             ]);
         }
     }
@@ -85,10 +96,6 @@ class ArticleController extends Controller
         $model = $this->findModel($id);
         $params = ArticleParam::find()->where(['id_article' => $model->id_article])->all();
 
-        //except
-        //if ($products->except != '')
-            //$query->andWhere("{{%shop_products}}.id_product NOT IN ($products->except)");
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if (Model::loadMultiple($params, Yii::$app->request->post()) && Model::validateMultiple($params)) {
                 foreach ($params as $param) {
@@ -97,9 +104,16 @@ class ArticleController extends Controller
             }
             return $this->redirect(['view', 'id' => $model->id_article]);
         } else {
+            //except
+            $paramUnique = ParameterUnique::find()
+                ->where(['not in', 'id_param', \yii\helpers\ArrayHelper::getColumn($params, 'id_param')])
+                ->asArray()
+                ->all();
+
             return $this->render('form', [
                 'model'  => $model,
                 'params' => $params,
+                'paramUnique' => $paramUnique,
             ]);
         }
     }
@@ -124,6 +138,49 @@ class ArticleController extends Controller
         if (Yii::$app->request->isAjax) {
             ArticleParam::findOne(['id_article' => $article, 'id_param' => $param])->delete();
             return true;
+        } else {
+            throw new ForbiddenHttpException('Доступ запрещен.');
+        }
+    }
+
+    public function actionAddParameter($param, $article = null)
+    {
+        if (Yii::$app->request->isAjax) {
+            $model = new ArticleParam;
+            $model->id_param = $param;
+            $model->value = '?';
+            if (is_null($article)) {
+                return $this->renderAjax('_params2', [
+                    'model' => $model,
+                ]);
+            }
+            else {
+                $model->id_article = $article;
+                $model->save();
+                return $this->renderAjax('_params', [
+                    'params' => ArticleParam::find()->where(['id_article' => $model->id_article])->all(),
+                ]);
+            }
+        } else {
+            throw new ForbiddenHttpException('Доступ запрещен.');
+        }
+    }
+
+    public function actionUpdateSelect()
+    {
+        if (Yii::$app->request->isAjax) {
+
+            $exception = Yii::$app->request->post('exception');
+
+            $paramUnique = ParameterUnique::find();
+
+            if ($exception != '')
+                $paramUnique->where('id_param NOT IN (' . $exception . ')');
+
+            return $this->renderAjax('_params_search', [
+                'paramUnique' => $paramUnique->asArray()->all()
+            ]);
+
         } else {
             throw new ForbiddenHttpException('Доступ запрещен.');
         }

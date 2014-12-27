@@ -73,7 +73,7 @@ class SiteController extends Controller
             ->andWhere(['or', 'end > ' . \Yii::$app->formatter->asTimestamp(date_create()), 'end IS NULL']);//несовпадение дат
 
         $articles = $query
-            ->select(['alias', 'title', 'image', 'preview', 'publication'])
+            ->select(['alias', 'title', 'image', 'preview', 'publication', 'id_category'])
             ->orderBy(['publication' => SORT_DESC])
             ->limit(15)
             ->all();

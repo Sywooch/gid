@@ -39,8 +39,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <? if ($model->id_user == Yii::$app->user->identity->id) { ?>
 
             <p>
-                <?= Html::a('Обновить профиль', ['update', 'username' => $model->username], ['class' => 'btn btn-primary btn-sm  btn-block']) ?>
-                <?= Html::a('Удалить профиль', ['delete', 'username' => $model->username], ['data-method' => "post", 'class' => 'btn btn-danger btn-sm  btn-block']) ?>
+                <?= Html::a('Обновить профиль', ['update', 'id' => $model->id_user], ['class' => 'btn btn-primary btn-sm  btn-block']) ?>
+                <?= Html::a('Удалить профиль', ['delete', 'id' => $model->id_user], ['data' => [
+                    'confirm' => 'Вы хотите удалить профиль?',
+                    'method' => 'post',
+                ],
+                'class' => 'btn btn-danger btn-sm  btn-block']) ?>
             </p>
 
         <? } ?>
@@ -49,11 +53,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="col-sm-9">
 
-        <p><b>Регистрация: </b><?= \Yii::$app->formatter->asDate($model->created) ?></p>
+        <p><b>Регистрация: </b><?= \Yii::$app->formatter->asDateTime($model->created) ?></p>
 
         <? if (!$model->online) { ?>
 
-            <p><b>Последний визит: </b><?= \Yii::$app->formatter->asDate($model->last_visit)?></p>
+            <p><b>Последний визит: </b><?= \Yii::$app->formatter->asDateTime($model->last_visit)?></p>
 
         <? } ?>
 

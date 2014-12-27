@@ -28,7 +28,7 @@ echo Menu::widget([
                 'class' => 'treeview'
             ],
             'items' => [
-                ['label' => 'Уникальные параметры', 'url' => '/param/index'],
+                ['label' => 'Уникальные параметры', 'url' => '/parameter-unique/index'],
             ]
         ],
 

@@ -10,7 +10,7 @@ use yii\bootstrap\ActiveForm;
  */
 ?>
 
-<div class="article-comment-search">
+<div class="article-comment-search clearfix">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],

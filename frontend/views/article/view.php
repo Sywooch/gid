@@ -67,6 +67,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+    <div>
+        <?= Html::a($article->category->name, ['category/view', 'id' => $article->category->id_category]) ?>
+    </div>
+
     <div id="articleText">
         <?= $article->text?>
     </div>
@@ -75,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <h3><span class="glyphicon glyphicon-comment" style="vertical-align: bottom;"></span> Комментарии (<?= $article->commentsCount?>):</h3>
 
-        <?php if (Yii::$app->user->isGuest)  { ?>
+        <?php if (Yii::$app->user->isGuest) { ?>
 
             <div class="alert alert-success">Только зарегистрированные пользователи могут оставлять комментарии.</div>
 
@@ -118,7 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
             ?>
 
-        <div id="comments-list">
+        </div>
 
     </section>
 

@@ -48,7 +48,7 @@ AppAsset::register($this);
                     'items' => [
                         [
                             'label' => 'Профиль',
-                            'url' => ['/user/view', 'username' => Yii::$app->user->identity->username],
+                            'url' => ['/user/view', 'id' => Yii::$app->user->identity->id],
                         ],
                         [
                             'label' => 'Выйти',

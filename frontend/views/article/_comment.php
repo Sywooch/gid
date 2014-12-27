@@ -18,7 +18,7 @@ function commentTree($comment, $margin = 0) { ?>
             <div class="comment-header">
                 <img src="<?= $comment->user->avatarArray['src'] ?>" alt="<?= $comment->user->avatarArray['alt'] ?>" width='32' height='32' class="img-circle avatar">
                 <?=
-                Html::a($comment->user->username, ['user/view', 'username' => $comment->user->username]) . ' ' .
+                Html::a($comment->user->username, ['user/view', 'id' => $comment->user->id]) . ' ' .
                 Yii::$app->formatter->asRelativeTime($comment->created) . ' ' .
                 Html::a('#', '#comment-' . $comment->id_comment)
                 ?>

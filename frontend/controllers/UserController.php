@@ -48,10 +48,10 @@ class UserController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($username)
+    public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($username),
+            'model' => $this->findModel($id),
         ]);
     }
 
@@ -61,9 +61,9 @@ class UserController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($username)
+    public function actionUpdate($id)
     {
-        $model = $this->findModel($username);
+        $model = $this->findModel($id);
         $model->scenario = 'updateUser';
 
         if ($model->id_user == Yii::$app->user->identity->id) {
@@ -77,11 +77,11 @@ class UserController extends Controller
 
                     if (!is_dir($model->pathToUserFolder() . '/avatar/'))
                         mkdir($model->pathToUserFolder() . '/avatar/', 766, true);
-
+                    //TODO - возможен русский!!!!!!   yii\helpers\FileHelper
                     $model->avatar->saveAs($model->pathToUserFolder() . '/avatar/' . $model->username . '.jpg');
                 }
 
-                return $this->redirect(['view', 'username' => $model->username]);
+                return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->render('update', [
                     'model' => $model,
@@ -98,14 +98,15 @@ class UserController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($username)
+    public function actionDelete($id)
     {
-        $model = $this->findModel($username);
+        $model = $this->findModel($id);
 
         $model->status = $model::STATUS_DELETED;
         $model->save();
 
-        return $this->redirect(['index']);
+        Yii::$app->session->setFlash('success', 'Профиль успешно удален.');
+        return $this->goHome();
     }
 
     /**
@@ -115,9 +116,9 @@ class UserController extends Controller
      * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($username)
+    protected function findModel($id)
     {
-        if (($model = User::findByUsername($username)) !== null) {
+        if (($model = User::findIdentity($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('Пользователь не найден.');
