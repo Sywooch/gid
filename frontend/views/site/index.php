@@ -35,6 +35,7 @@ $this->registerCss('
 <div class="site-index">
 
     <?php
+        $items = [];
         foreach($popularArticles as $article) {
             $items[] = [
                 'content' => '<img src="' . $article->image . '">',
