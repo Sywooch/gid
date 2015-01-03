@@ -14,6 +14,18 @@ return [
             'assignmentFile' => '@common/components/rbac/assignments.php',
             'ruleFile'       => '@common/components/rbac/rules.php'
         ],
+        'db' => [
+            'class'       => 'yii\db\Connection',
+            'dsn'         => 'mysql:host=localhost;dbname=lavrenop_gid',
+            'username'    => 'lavrenop_gid',
+            'password'    => 'sIEvTlAC',
+            'charset'     => 'utf8',
+            'tablePrefix' => 'jhh_',
+        ],
+        'mailer' => [
+            'class'    => 'yii\swiftmailer\Mailer',
+            'viewPath' => '@common/mail',
+        ],
     ],
     'as beforeAction' => [
         'class' => '\common\components\LastVisitBehavior'
