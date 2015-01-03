@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <? } ?>
 
-        <? if ($model->genderName) { ?>
+        <? if (isset($model->genderName)) { ?>
 
             <p><b>Пол: </b><?= $model->genderName?></p>
 
