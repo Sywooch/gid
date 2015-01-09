@@ -96,8 +96,9 @@ class Article extends ActiveRecord
         return [
             [['id_category', 'title', 'text'], 'required'],
             [['id_category', 'status'], 'integer'],//'publication', 'end'
-            [['preview', 'text', 'alias'], 'string'],
+            [['preview', 'title', 'alias', 'text'], 'string'],
             ['alias', 'unique'],
+            ['alias', 'match', 'pattern' => '/^[a-zA-Z0-9-]+$/i'],
             [['publication', 'end'] , 'safe'],
             ['status', 'in', 'range' => array_keys($this->statusArray)],
             ['active', 'boolean'],
