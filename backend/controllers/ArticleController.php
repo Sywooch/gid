@@ -67,12 +67,15 @@ class ArticleController extends Controller
         $model = new Article();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            foreach(Yii::$app->request->post('ArticleParam') as $param) {
-                $articleParam = new ArticleParam;
-                $articleParam->id_article = $model->id_article;
-                $articleParam->id_param = $param['id_param'];
-                $articleParam->value = $param['value'];
-                $articleParam->save();
+            $requestParam = Yii::$app->request->post('ArticleParam');
+            if (!is_null($requestParam)) {
+                foreach($requestParam as $param) {
+                    $articleParam = new ArticleParam;
+                    $articleParam->id_article = $model->id_article;
+                    $articleParam->id_param = $param['id_param'];
+                    $articleParam->value = $param['value'];
+                    $articleParam->save();
+                }
             }
             return $this->redirect(['view', 'id' => $model->id_article]);
         } else {

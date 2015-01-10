@@ -5,7 +5,7 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\ArrayHelper;
 use common\models\article\ArticleCategory;
 use dosamigos\datetimepicker\DateTimePicker;
-use mihaildev\ckeditor\CKEditor;
+use dosamigos\tinymce\TinyMce;
 use mihaildev\elfinder\InputFile;
 use backend\assets\AppAsset;
 
@@ -82,17 +82,22 @@ $model->publication = ($model->publication) ? Yii::$app->formatter->asDateTime($
         'multiple'      => false
     ]) ?>
 
-    <?= $form->field($model, 'preview')->widget(CKEditor::className(), [
-        'editorOptions' => [
-            'preset' => 'standard',
-        ],
-    ]) ?>
+    <?php $editor = [
+        'options' => ['rows' => 6],
+        'language' => 'ru',
+        'clientOptions' => [
+            'plugins' => [
+                "advlist autolink lists link charmap print preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime media table contextmenu paste"
+            ],
+            'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+        ]
+    ]; ?>
 
-    <?= $form->field($model, 'text')->widget(CKEditor::className(), [
-        'editorOptions' => [
-            'preset' => 'full',
-        ],
-    ]) ?>
+    <?= $form->field($model, 'preview')->widget(TinyMce::className(), $editor) ?>
+
+    <?= $form->field($model, 'text')->widget(TinyMce::className(), $editor)?>
 
     <?= $form->field($model, 'status')->dropDownList($model->statusArray) ?>
 
@@ -107,7 +112,7 @@ $model->publication = ($model->publication) ? Yii::$app->formatter->asDateTime($
             'todayBtn' => true,
             'pickerPosition' => "top-right"
         ]
-    ];?>
+    ]; ?>
 
     <?= $form->field($model, 'publication')->widget(DateTimePicker::className(), $dateTimePicker) ?>
 
